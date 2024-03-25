@@ -1,6 +1,6 @@
 # scmu_app
 
-Sistemas de computação móvel e ubíqua
+Mobile and Ubiquous Application
 
 ## Getting Started
 
