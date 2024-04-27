@@ -3,10 +3,9 @@
 
 
 #define FIREBASE_HOST "https://scmu-terrariums-default-rtdb.europe-west1.firebasedatabase.app"
-#define FIREBASE_AUTH "1doYq2Dc7E3rPm16zLepaFHaUscq8m0r9JOJ8pxP"
 
-#define WIFI_SSID "Vodafone-9941A4"
-#define WIFI_PASSWORD "RRVc6MnsYT"
+#define WIFI_SSID "YOUR_WIFI_SSID"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
 
 const int ledPin = 27;
 
@@ -28,8 +27,6 @@ void setup() {
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
 
-  //Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  //Firebase.reconnectWiFi(true);
 }
 
 void loop() {
