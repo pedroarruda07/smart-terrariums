@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "540926420878",
+    "firebase_url": "https://scmu-terrariums-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "scmu-terrariums",
+    "storage_bucket": "scmu-terrariums.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540926420878:android:b66448c693ce9ead9b26df",
+        "android_client_info": {
+          "package_name": "com.example.scmu_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnEA4DJnNbj9fXh-pI2hE_Eixtx-6akYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
