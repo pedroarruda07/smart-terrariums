@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:scmu_app/AddTerrariumDialog.dart';
 import 'TerrariumPage.dart';
@@ -12,35 +13,28 @@ class TerrariumsListPage extends StatefulWidget {
 }
 
 class _TerrariumsListPageState extends State<TerrariumsListPage> {
-  final List<Terrarium> terrariums = [
-    Terrarium(
-      name: 'Terrarium 1',
-      minTemperature: 25.0,
-      maxTemperature: 28.0,
-      minHumidity: 50.0,
-      maxHumidity: 60.0,
-      minLightHours: 10,
-      maxLightHours: 12,
-      minHeaterHours: 6,
-      maxHeaterHours: 8,
-      minFeedingHours: 2,
-      maxFeedingHours: 3,
-    ),
-    Terrarium(
-      name: 'Terrarium 2',
-      minTemperature: 20.0,
-      maxTemperature: 30.0,
-      minHumidity: 40.0,
-      maxHumidity: 70.0,
-      minLightHours: 8,
-      maxLightHours: 14,
-      minHeaterHours: 5,
-      maxHeaterHours: 10,
-      minFeedingHours: 1,
-      maxFeedingHours: 4,
-    ),
-  ];
+  final databaseReference = FirebaseDatabase.instance.ref('Terrariums');
+  final List<Terrarium> terrariums = [];
 
+  @override
+  void initState(){
+    super.initState();
+
+
+  }
+
+  Stream<List<Terrarium>> getTerrariumsStream() {
+    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Terrariums');
+
+    return ref.onValue.map((event) {
+      List<Terrarium> terrariums = [];
+      event.snapshot.children.forEach((child) {
+        //print('Key: ${child.key}, Value: ${child.value}');
+        terrariums.add(Terrarium.fromSnapshot(child));
+      });
+      return terrariums;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +42,31 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
       appBar: AppBar(
         title: const Text('Terrariums'),
       ),
-      body: ListView.builder(
-        itemCount: terrariums.length,
-        itemBuilder: (context, index) {
-          final terrarium = terrariums[index];
-          return ListTile(
-            title: Text(terrarium.name),
-            subtitle: Text('Temperature: ${terrarium.minTemperature}°C | Humidity: ${terrarium.minHumidity}%'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TerrariumPageFirebase()),
+      body: StreamBuilder(
+        stream: getTerrariumsStream(),
+        builder: (context, AsyncSnapshot<List<Terrarium>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final terrariums = snapshot.data ?? [];
+          return ListView.builder(
+            itemCount: terrariums.length,
+            itemBuilder: (context, index) {
+              final terrarium = terrariums[index];
+              return ListTile(
+                title: Text(terrarium.name),
+                subtitle: Text('Temperature: ${terrarium.minTemperature}°C - ${terrarium.maxTemperature}°C | Humidity: ${terrarium.minHumidity}% - ${terrarium.maxHumidity}%'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TerrariumPageFirebase()), // Ensure TerrariumPageFirebase can receive a terrarium object
+                  );
+                },
               );
             },
           );
@@ -68,7 +76,7 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
         onPressed: () {
           _showAddTerrariumDialog(context);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

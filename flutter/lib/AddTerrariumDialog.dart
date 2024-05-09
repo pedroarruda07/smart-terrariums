@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'terrarium.dart';
 
@@ -22,6 +23,8 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
   TextEditingController maxHeaterHoursController = TextEditingController();
   TextEditingController minFeedingHoursController = TextEditingController();
   TextEditingController maxFeedingHoursController = TextEditingController();
+
+  final dbRef = FirebaseDatabase.instance.ref('Terrariums');
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +152,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
           onPressed: () {
             // Validate and save form data
             final newTerrarium = Terrarium(
+              key: nameController.text+'1',
               name: nameController.text,
               minTemperature: double.parse(minTemperatureController.text),
               maxTemperature: double.parse(maxTemperatureController.text),
@@ -161,6 +165,16 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               minFeedingHours: int.parse(minFeedingHoursController.text),
               maxFeedingHours: int.parse(maxFeedingHoursController.text),
             );
+            dbRef.push().set({
+              'name': newTerrarium.name,
+               'minTemp': newTerrarium.minTemperature,
+               'maxTemp': newTerrarium.maxTemperature,
+               'minHumidity': newTerrarium.minHumidity,
+               'maxHumidity': newTerrarium.maxHumidity,
+               'minLight': newTerrarium.minLightHours,
+               'maxLight': newTerrarium.maxLightHours
+
+            });
             widget.onTerrariumAdded(newTerrarium);
             Navigator.of(context).pop();
           },
