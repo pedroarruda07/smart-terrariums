@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
+import 'Terrarium.dart';
 
 class TerrariumPageFirebase extends StatefulWidget {
-  const TerrariumPageFirebase({Key? key}) : super(key: key);
+  final Terrarium terrarium;
+  const TerrariumPageFirebase({Key? key, required this.terrarium}) : super(key: key);
 
   @override
   _TerrariumPageFirebaseState createState() => _TerrariumPageFirebaseState();
 }
 
 class _TerrariumPageFirebaseState extends State<TerrariumPageFirebase> {
-  final dbRef = FirebaseDatabase.instance.ref('LEDStatus');
+  late DatabaseReference dbRef;
   bool lightStatus = false;
 
+  @override
+  void initState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref("/Terrariums/${widget.terrarium.key}");
+  }
+
   void toggleLed(String status) async {
-    await dbRef.set(status);
+    await dbRef.child("ledStatus").set(status);
   }
 
   @override

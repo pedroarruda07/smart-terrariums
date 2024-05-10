@@ -9,7 +9,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Run the app
   runApp(const MyApp());
 }
 
@@ -24,6 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const LoginPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'MainPage.dart';
 import 'TerrariumsListPage.dart';
 
 
@@ -19,13 +20,11 @@ class _LoginPageState extends State<LoginPage> {
 
     // Dummy authentication logic
     if (username == 'admin' && password == 'password') {
-      // Navigate to home screen with terrariums list
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => TerrariumsListPage()),
+        MaterialPageRoute(builder: (context) => MainPage()),
       );
     } else {
-      // Show error message for invalid credentials
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

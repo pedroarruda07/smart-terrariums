@@ -3,6 +3,9 @@ import 'package:firebase_database/firebase_database.dart';
 class Terrarium {
   final String key;
   final String name;
+  final String ledStatus;
+  final double temperature;
+  final double humidity;
   final double minTemperature;
   final double maxTemperature;
   final double minHumidity;
@@ -17,6 +20,9 @@ class Terrarium {
   Terrarium({
     required this.key,
     required this.name,
+    required this.ledStatus,
+    required this.temperature,
+    required this.humidity,
     required this.minTemperature,
     required this.maxTemperature,
     required this.minHumidity,
@@ -34,6 +40,9 @@ class Terrarium {
     return Terrarium(
       key: snapshot.key!,
       name: value['name'],
+      ledStatus: value['ledStatus'],
+      temperature: (value['temperature'] as num).toDouble(),
+      humidity: (value['humidity'] as num).toDouble(),
       minTemperature: (value['minTemp'] as num).toDouble(),
       maxTemperature: (value['maxTemp'] as num).toDouble(),
       minHumidity: (value['minHumidity'] as num).toDouble(),

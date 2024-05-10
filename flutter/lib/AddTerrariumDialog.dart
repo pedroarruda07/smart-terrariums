@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'terrarium.dart';
+import 'Terrarium.dart';
 
 class AddTerrariumDialog extends StatefulWidget {
   final Function(Terrarium) onTerrariumAdded;
@@ -154,6 +154,9 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
             final newTerrarium = Terrarium(
               key: nameController.text+'1',
               name: nameController.text,
+              temperature: 0.0,
+              humidity: 0.0,
+              ledStatus: "OFF",
               minTemperature: double.parse(minTemperatureController.text),
               maxTemperature: double.parse(maxTemperatureController.text),
               minHumidity: double.parse(minHumidityController.text),
