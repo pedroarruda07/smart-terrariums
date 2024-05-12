@@ -26,6 +26,7 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
     final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Terrariums');
     return ref.onValue.map((event) {
       List<Terrarium> terrariums = [];
+
       event.snapshot.children.forEach((child) {
         terrariums.add(Terrarium.fromSnapshot(child));
       });
