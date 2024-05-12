@@ -36,23 +36,32 @@ class Terrarium {
   });
 
   factory Terrarium.fromSnapshot(DataSnapshot snapshot) {
-    Map<String, dynamic> value = snapshot.value as Map<String, dynamic>;
+    final value = snapshot.value as Map<dynamic, dynamic>?;
+
+    if (value == null) {
+      throw StateError('Missing data for terrarium snapshot');
+    }
+
+    final Map<String, dynamic> terrariumData = value.map<String, dynamic>(
+          (key, value) => MapEntry(key as String, value),
+    );
+
     return Terrarium(
       key: snapshot.key!,
-      name: value['name'],
-      ledStatus: value['ledStatus'],
-      temperature: (value['temperature'] as num).toDouble(),
-      humidity: (value['humidity'] as num).toDouble(),
-      minTemperature: (value['minTemp'] as num).toDouble(),
-      maxTemperature: (value['maxTemp'] as num).toDouble(),
-      minHumidity: (value['minHumidity'] as num).toDouble(),
-      maxHumidity: (value['maxHumidity'] as num).toDouble(),
-      minLightHours: value['minLight'],
-      maxLightHours: value['maxLight'],
-      minHeaterHours: value['minHeaterHours'],
-      maxHeaterHours: value['maxHeaterHours'],
-      minFeedingHours: value['minFeedingHours'],
-      maxFeedingHours: value['maxFeedingHours'],
+      name: terrariumData['name'],
+      ledStatus: terrariumData['ledStatus'],
+      temperature: (terrariumData['temperature'] as num).toDouble(),
+      humidity: (terrariumData['humidity'] as num).toDouble(),
+      minTemperature: (terrariumData['minTemp'] as num).toDouble(),
+      maxTemperature: (terrariumData['maxTemp'] as num).toDouble(),
+      minHumidity: (terrariumData['minHumidity'] as num).toDouble(),
+      maxHumidity: (terrariumData['maxHumidity'] as num).toDouble(),
+      minLightHours: terrariumData['minLight'],
+      maxLightHours: terrariumData['maxLight'],
+      minHeaterHours: terrariumData['minHeaterHours'],
+      maxHeaterHours: terrariumData['maxHeaterHours'],
+      minFeedingHours: terrariumData['minFeedingHours'],
+      maxFeedingHours: terrariumData['maxFeedingHours'],
     );
   }
 }
