@@ -10,6 +10,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = [
     TerrariumsListPage(),
+    //PrefabsPage(),
     Text('Profile Page'),
   ];
 
@@ -28,6 +29,10 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Terrariums',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_rounded),
+            label: 'Prefabs',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

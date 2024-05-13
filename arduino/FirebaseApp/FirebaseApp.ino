@@ -12,8 +12,8 @@
 Firebase firebase(FIREBASE_HOST);
 String terrarium = "/Terrariums/-NxOimqv_QLBmqdP6ToG";
 
-#define WIFI_SSID "Vodafone-9941A4"
-#define WIFI_PASSWORD "RRVc6MnsYT"
+#define WIFI_SSID "Vodafone-71F112"
+#define WIFI_PASSWORD "6Z7kGHZvM2"
 
 #define DHTTYPE DHT11
 const int dhtPin = 18;
@@ -24,6 +24,11 @@ const int ledPin = 27;
 #define SCREEN_WIDTH 128 
 #define SCREEN_HEIGHT 64 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+#define POWER 33
+#define SIGNAL 32
+int value=0;
+int level=0;
 
 void setup() {
   Serial.begin(115200);
@@ -45,6 +50,9 @@ void setup() {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
+
+  pinMode(POWER,OUTPUT);
+  digitalWrite(POWER,LOW);
 
   delay(500);
   display.clearDisplay();
@@ -69,11 +77,29 @@ void loop() {
   if (isnan(h) || isnan(t)) {
     Serial.println("Failed reception");
     return;
-    //Returns an error if the ESP32 does not receive any measurements
   }
   firebase.setFloat(terrarium+"/temperature", t);
   firebase.setFloat(terrarium+"/humidity", h);
 
+  displayScreen(t, h);
+  level=waterSensor();
+  Serial.print("Water Level:");
+  Serial.println(level);
+  delay(1000);
+}
+
+int waterSensor()
+{
+  digitalWrite(POWER,HIGH);
+  delay(10);
+  value=analogRead(SIGNAL);
+  delay(10);
+  digitalWrite(POWER,LOW);
+  return value;
+}
+
+void displayScreen(float t, float h)
+{
   display.clearDisplay();
   display.setCursor(0, 10);
   display.print("Temperature: ");
@@ -83,5 +109,4 @@ void loop() {
   display.print(h);
   display.print("%");
   display.display();
-  delay(1000);
 }
