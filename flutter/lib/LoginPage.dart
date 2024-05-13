@@ -47,11 +47,11 @@ class _LoginPageState extends State<LoginPage> {
       text,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 16,
+        fontSize: 22,
         foreground: Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..color = Colors.black,
+          ..strokeWidth = 2.5
+          ..color = Colors.green.shade900,
       ),
     );
   }
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       text,
       textAlign: TextAlign.center,
       style: const TextStyle(
-        fontSize: 16,
+        fontSize: 22,
         color: Colors.white,
       ),
     );
@@ -71,9 +71,6 @@ class _LoginPageState extends State<LoginPage> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -92,26 +89,42 @@ class _LoginPageState extends State<LoginPage> {
                     Icons.lock,
                     size: 80,
                   ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Shadow (Outline) Text
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildOutlinedText('Welcome back'),
-                        ],
-                      ),
-                      // Foreground Text
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildForegroundText('Welcome back'),
-                        ],
-                      ),
-                    ],
+                  Text(
+                    'Welcome back!',
+                    style: TextStyle(
+                      color: Colors.grey[600], // Adjust text color as needed
+                      fontSize: 16, // Adjust font size as needed
+                    ),
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 55),
+                  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: -145 + width * 0.5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Shadow (Outline) Text
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildOutlinedText('Login'),
+                              ],
+                            ),
+                            // Foreground Text
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildForegroundText('Login'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: -150 + width * 0.5),
                     child: TextField(
@@ -150,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                       //decoration: const InputDecoration(labelText: 'Username'),
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -159,14 +172,14 @@ class _LoginPageState extends State<LoginPage> {
                           side: BorderSide(color: Colors.grey.shade600),
                         ),
                       ),
-                      minimumSize: MaterialStateProperty.all(Size(275, 58)),
-                      backgroundColor: MaterialStateProperty.all(Colors.green.shade200),
+                      minimumSize: MaterialStateProperty.all(Size(275, 60)),
+                      backgroundColor: MaterialStateProperty.all(Colors.green.shade300),
                       overlayColor: MaterialStateProperty.resolveWith<Color>(
                             (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed)) {
                             return Colors.white;
                           }
-                          return Colors.green.shade200;
+                          return Colors.green.shade300;
                         },
                       ),
                     ),
