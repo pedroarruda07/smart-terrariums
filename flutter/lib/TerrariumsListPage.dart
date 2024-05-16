@@ -108,7 +108,7 @@ class TerrariumCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TerrariumPageFirebase(terrarium: terrarium)),
+            MaterialPageRoute(builder: (context) => TerrariumPage(terrarium: terrarium)),
           );
         },
       ),
