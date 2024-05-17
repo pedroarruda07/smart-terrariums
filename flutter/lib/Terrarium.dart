@@ -16,6 +16,9 @@ class Terrarium {
   final int? maxHeaterHours;
   final int? minFeedingHours;
   final int? maxFeedingHours;
+  final double foodLevel;
+  final double waterLevel;
+  final String heaterStatus;
 
   Terrarium({
     required this.key,
@@ -33,6 +36,9 @@ class Terrarium {
     this.maxHeaterHours,
     this.minFeedingHours,
     this.maxFeedingHours,
+    required this.foodLevel,
+    required this.heaterStatus,
+    required this.waterLevel
   });
 
   factory Terrarium.fromSnapshot(DataSnapshot snapshot) {
@@ -62,6 +68,9 @@ class Terrarium {
       maxHeaterHours: terrariumData['maxHeaterHours'],
       minFeedingHours: terrariumData['minFeedingHours'],
       maxFeedingHours: terrariumData['maxFeedingHours'],
+      waterLevel: (terrariumData['waterLevel'] as num).toDouble(),
+      foodLevel: (terrariumData['foodLevel'] as num).toDouble(),
+      heaterStatus: terrariumData['heaterStatus']
     );
   }
 }

@@ -15,7 +15,6 @@ class TerrariumsListPage extends StatefulWidget {
 
 class _TerrariumsListPageState extends State<TerrariumsListPage> {
   final databaseReference = FirebaseDatabase.instance.ref('Terrariums');
-  final List<Terrarium> terrariums = [];
 
   @override
   void initState() {
@@ -75,13 +74,7 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddTerrariumDialog(
-          onTerrariumAdded: (newTerrarium) {
-            setState(() {
-              terrariums.add(newTerrarium);
-            });
-          },
-        );
+        return const AddTerrariumDialog();
       },
     );
   }

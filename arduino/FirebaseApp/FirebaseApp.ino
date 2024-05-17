@@ -12,14 +12,18 @@
 Firebase firebase(FIREBASE_HOST);
 String terrarium = "/Terrariums/-NxOimqv_QLBmqdP6ToG";
 
-#define WIFI_SSID "Vodafone-71F112"
-#define WIFI_PASSWORD "6Z7kGHZvM2"
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
 
 #define DHTTYPE DHT11
 const int dhtPin = 18;
 DHT dht(dhtPin, DHTTYPE);
 
 const int ledPin = 27;
+
+const int alarmLed = 13;
+float maxTemp = 0;
+float minTemp = 0;
 
 #define SCREEN_WIDTH 128 
 #define SCREEN_HEIGHT 64 
@@ -35,6 +39,8 @@ void setup() {
   dht.begin();
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
+  pinMode(alarmLed, OUTPUT);
+  digitalWrite(alarmLed, LOW);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
@@ -71,7 +77,9 @@ void loop() {
   } else if (value == "OFF") {
     digitalWrite(ledPin, LOW);
   }
-
+  
+  maxTemp = firebase.getFloat(terrarium+"/maxTemp");
+  minTemp = firebase.getFloat(terrarium+"/minTemp");
   float h = dht.readHumidity();
   float t = dht.readTemperature();
   if (isnan(h) || isnan(t)) {
@@ -80,6 +88,12 @@ void loop() {
   }
   firebase.setFloat(terrarium+"/temperature", t);
   firebase.setFloat(terrarium+"/humidity", h);
+
+  if (t < minTemp || t > maxTemp){
+    digitalWrite(alarmLed, HIGH);
+  } else {
+    digitalWrite(alarmLed, LOW);
+  }
 
   displayScreen(t, h);
   level=waterSensor();

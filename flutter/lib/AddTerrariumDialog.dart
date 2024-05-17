@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'Terrarium.dart';
 
 class AddTerrariumDialog extends StatefulWidget {
-  final Function(Terrarium) onTerrariumAdded;
 
-  const AddTerrariumDialog({Key? key, required this.onTerrariumAdded}) : super(key: key);
+  const AddTerrariumDialog({Key? key}) : super(key: key);
 
   @override
   _AddTerrariumDialogState createState() => _AddTerrariumDialogState();
@@ -152,11 +151,14 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
           onPressed: () {
             // Validate and save form data
             final newTerrarium = Terrarium(
-              key: nameController.text+'1',
+              key: nameController.text,
               name: nameController.text,
+              foodLevel: 0,
+              waterLevel: 0,
               temperature: 0.0,
               humidity: 0.0,
               ledStatus: "OFF",
+              heaterStatus: "OFF",
               minTemperature: double.parse(minTemperatureController.text),
               maxTemperature: double.parse(maxTemperatureController.text),
               minHumidity: double.parse(minHumidityController.text),
@@ -178,7 +180,6 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
                'maxLight': newTerrarium.maxLightHours
 
             });
-            widget.onTerrariumAdded(newTerrarium);
             Navigator.of(context).pop();
           },
           child: Text('Add'),
