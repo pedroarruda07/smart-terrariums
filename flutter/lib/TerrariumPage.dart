@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:scmu_app/activity_graph_widget.dart';
+import 'package:scmu_app/graph_widget.dart';
 
 import 'Terrarium.dart';
 
@@ -15,7 +16,6 @@ class TerrariumPage extends StatefulWidget {
 }
 
 class _TerrariumPageState extends State<TerrariumPage> {
-
   final String espUrl = 'http://192.168.1.129'; // Replace with actual ESP32 IP address
   late DatabaseReference dbRef;
 
@@ -50,8 +50,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
   Stream<Terrarium> getTerrarium() {
     final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Terrariums').child(widget.terrarium.key);
     return ref.onValue.map((event) {
-      Terrarium terrarium = Terrarium.fromSnapshot(event.snapshot);
-      return terrarium;
+      return Terrarium.fromSnapshot(event.snapshot);
     });
   }
 
@@ -63,9 +62,10 @@ class _TerrariumPageState extends State<TerrariumPage> {
         backgroundColor: Colors.green,
         centerTitle: true,
       ),
-      body: StreamBuilder(
-        stream: getTerrarium(),
-          builder: (context, AsyncSnapshot<Terrarium> snapshot) {
+      body: SingleChildScrollView(
+        child: StreamBuilder<Terrarium>(
+          stream: getTerrarium(),
+          builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
                 child: Text('Error: ${snapshot.error}'),
@@ -74,6 +74,10 @@ class _TerrariumPageState extends State<TerrariumPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+            if (!snapshot.hasData) {
+              return Center(child: Text('No data available'));
+            }
+
             final terrarium = snapshot.data!;
 
             return Padding(
@@ -88,8 +92,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
                           width: 100,
                           height: 100,
                           color: Colors.grey[300],
-                          child: Icon(Icons.image, size: 50, color: Colors
-                              .grey[600]),
+                          child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 40),
                         Row(
@@ -103,12 +106,14 @@ class _TerrariumPageState extends State<TerrariumPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  _buildSwitch('LIGHT', terrarium.ledStatus == 'ON' ? true : false, 'led'),
-                  _buildSwitch('HEATER', terrarium.heaterStatus == 'ON' ? true : false, 'heater'),
+                  _buildSwitch('LIGHT', terrarium.ledStatus == 'ON', 'led'),
+                  _buildSwitch('HEATER', terrarium.heaterStatus == 'ON', 'heater'),
                   const SizedBox(height: 32),
                   _buildIndicator('WATER LEVEL', 'OK', Colors.green),
                   _buildIndicator('FOOD LEVEL', 'LOW', Colors.red),
-                  const Spacer(),
+                  const SizedBox(height: 32),
+                  ActivityGraph(graphData: terrarium.activity),
+                  const SizedBox(height: 32),
                   ElevatedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -118,8 +123,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
                         ),
                       ),
                       minimumSize: MaterialStateProperty.all(Size(275, 60)),
-                      backgroundColor: MaterialStateProperty.all(
-                          Colors.green.shade300),
+                      backgroundColor: MaterialStateProperty.all(Colors.green.shade300),
                       overlayColor: MaterialStateProperty.resolveWith<Color>(
                             (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed)) {
@@ -141,7 +145,9 @@ class _TerrariumPageState extends State<TerrariumPage> {
                 ],
               ),
             );
-          }),
+          },
+        ),
+      ),
     );
   }
 
@@ -178,7 +184,6 @@ class _TerrariumPageState extends State<TerrariumPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(width: MediaQuery.sizeOf(context).width * 0.15),
           Text(
@@ -192,9 +197,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
           Switch(
             value: value,
             onChanged: (bool newValue) {
-              value = newValue;
               toggleLed(led, newValue ? 'ON' : 'OFF');
-              },
+            },
             activeColor: Colors.green,
           ),
         ],

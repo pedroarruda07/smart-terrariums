@@ -169,6 +169,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               maxHeaterHours: int.parse(maxHeaterHoursController.text),
               minFeedingHours: int.parse(minFeedingHoursController.text),
               maxFeedingHours: int.parse(maxFeedingHoursController.text),
+              activity: {}
             );
             dbRef.push().set({
               'name': newTerrarium.name,
