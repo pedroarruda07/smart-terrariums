@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'Terrarium.dart';
 
 class AddTerrariumDialog extends StatefulWidget {
-
   const AddTerrariumDialog({Key? key}) : super(key: key);
 
   @override
@@ -11,133 +10,63 @@ class AddTerrariumDialog extends StatefulWidget {
 }
 
 class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController minTemperatureController = TextEditingController();
-  TextEditingController maxTemperatureController = TextEditingController();
-  TextEditingController minHumidityController = TextEditingController();
-  TextEditingController maxHumidityController = TextEditingController();
-  TextEditingController minLightHoursController = TextEditingController();
-  TextEditingController maxLightHoursController = TextEditingController();
-  TextEditingController minHeaterHoursController = TextEditingController();
-  TextEditingController maxHeaterHoursController = TextEditingController();
-  TextEditingController minFeedingHoursController = TextEditingController();
-  TextEditingController maxFeedingHoursController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController minTemperatureController = TextEditingController();
+  final TextEditingController maxTemperatureController = TextEditingController();
+  final TextEditingController minHumidityController = TextEditingController();
+  final TextEditingController maxHumidityController = TextEditingController();
+  final TextEditingController minLightHoursController = TextEditingController();
+  final TextEditingController maxLightHoursController = TextEditingController();
+  final TextEditingController minHeaterHoursController = TextEditingController();
+  final TextEditingController maxHeaterHoursController = TextEditingController();
+  final TextEditingController minFeedingHoursController = TextEditingController();
+  final TextEditingController maxFeedingHoursController = TextEditingController();
 
   final dbRef = FirebaseDatabase.instance.ref('Terrariums');
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Terrarium'),
+      title: Text('Add New Terrarium', style: TextStyle(fontWeight: FontWeight.bold)),
       content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: minTemperatureController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Min Temperature'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: maxTemperatureController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Max Temperature'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: minHumidityController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Min Humidity'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: maxHumidityController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Max Humidity'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: minLightHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Min Light Hours'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: maxLightHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Max Light Hours'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: minHeaterHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Min Heater Hours'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: maxHeaterHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Max Heater Hours'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: minFeedingHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Min Feeding Hours'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: maxFeedingHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Max Feeding Hours'),
-                  ),
-                ),
-              ],
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildTextField(nameController, 'Name'),
+              SizedBox(height: 10),
+              _buildSectionLabel('Temperature'),
+              _buildRow([
+                _buildTextField(minTemperatureController, 'Min', keyboardType: TextInputType.number),
+                _buildTextField(maxTemperatureController, 'Max', keyboardType: TextInputType.number),
+              ]),
+              SizedBox(height: 10),
+              _buildSectionLabel('Humidity'),
+              _buildRow([
+                _buildTextField(minHumidityController, 'Min', keyboardType: TextInputType.number),
+                _buildTextField(maxHumidityController, 'Max', keyboardType: TextInputType.number),
+              ]),
+              SizedBox(height: 10),
+              _buildSectionLabel('Light Hours'),
+              _buildRow([
+                _buildTextField(minLightHoursController, 'Min', keyboardType: TextInputType.number),
+                _buildTextField(maxLightHoursController, 'Max', keyboardType: TextInputType.number),
+              ]),
+              SizedBox(height: 10),
+              _buildSectionLabel('Heater Hours'),
+              _buildRow([
+                _buildTextField(minHeaterHoursController, 'Min', keyboardType: TextInputType.number),
+                _buildTextField(maxHeaterHoursController, 'Max', keyboardType: TextInputType.number),
+              ]),
+              SizedBox(height: 10),
+              _buildSectionLabel('Feeding Hours'),
+              _buildRow([
+                _buildTextField(minFeedingHoursController, 'Min', keyboardType: TextInputType.number),
+                _buildTextField(maxFeedingHoursController, 'Max', keyboardType: TextInputType.number),
+              ]),
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
@@ -147,7 +76,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
           },
           child: Text('Cancel'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () {
             // Validate and save form data
             final newTerrarium = Terrarium(
@@ -169,23 +98,55 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               maxHeaterHours: int.parse(maxHeaterHoursController.text),
               minFeedingHours: int.parse(minFeedingHoursController.text),
               maxFeedingHours: int.parse(maxFeedingHoursController.text),
-              activity: {}
+              activity: {},
             );
+
             dbRef.push().set({
               'name': newTerrarium.name,
-               'minTemp': newTerrarium.minTemperature,
-               'maxTemp': newTerrarium.maxTemperature,
-               'minHumidity': newTerrarium.minHumidity,
-               'maxHumidity': newTerrarium.maxHumidity,
-               'minLight': newTerrarium.minLightHours,
-               'maxLight': newTerrarium.maxLightHours
-
+              'minTemp': newTerrarium.minTemperature,
+              'maxTemp': newTerrarium.maxTemperature,
+              'minHumidity': newTerrarium.minHumidity,
+              'maxHumidity': newTerrarium.maxHumidity,
+              'minLight': newTerrarium.minLightHours,
+              'maxLight': newTerrarium.maxLightHours,
             });
+
             Navigator.of(context).pop();
           },
           child: Text('Add'),
         ),
       ],
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String labelText, {TextInputType keyboardType = TextInputType.text}) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      ),
+    );
+  }
+
+  Widget _buildSectionLabel(String labelText) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Text(
+        labelText,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildRow(List<Widget> children) {
+    return Row(
+      children: children.map((child) => Expanded(child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: child,
+      ))).toList(),
     );
   }
 }
