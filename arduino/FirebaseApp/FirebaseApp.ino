@@ -12,8 +12,8 @@
 Firebase firebase(FIREBASE_HOST);
 String terrarium = "/Terrariums/-NxOimqv_QLBmqdP6ToG";
 
-#define WIFI_SSID ""
-#define WIFI_PASSWORD ""
+#define WIFI_SSID "Vodafone-9941A4"
+#define WIFI_PASSWORD "RRVc6MnsYT"
 
 #define DHTTYPE DHT11
 const int dhtPin = 18;

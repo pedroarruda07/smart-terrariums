@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:scmu_app/activity_graph_widget.dart';
-import 'package:scmu_app/graph_widget.dart';
 
 import 'Terrarium.dart';
 
@@ -27,7 +26,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
 
   Future<void> toggleLed(String led, String command) async {
     var url = Uri.parse('$espUrl/$led/$command');
-    const timeoutDuration = Duration(seconds: 2); // Set your desired timeout duration
+    const timeoutDuration = Duration(seconds: 2);
 
     try {
       final response = await http.get(url).timeout(timeoutDuration);
@@ -109,8 +108,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
                   _buildSwitch('LIGHT', terrarium.ledStatus == 'ON', 'led'),
                   _buildSwitch('HEATER', terrarium.heaterStatus == 'ON', 'heater'),
                   const SizedBox(height: 32),
-                  _buildIndicator('WATER LEVEL', 'OK', Colors.green),
-                  _buildIndicator('FOOD LEVEL', 'LOW', Colors.red),
+                  _buildIndicator('WATER LEVEL', terrarium.waterLevel),
+                  _buildIndicator('FOOD LEVEL', terrarium.foodLevel),
                   const SizedBox(height: 32),
                   ActivityGraph(graphData: terrarium.activity),
                   const SizedBox(height: 32),
@@ -206,7 +205,20 @@ class _TerrariumPageState extends State<TerrariumPage> {
     );
   }
 
-  Widget _buildIndicator(String title, String status, Color color) {
+  Widget _buildIndicator(String title, double level) {
+    String status;
+    Color color;
+    if (level <= 100){
+      status = 'LOW';
+      color = Colors.red;
+    } else if (level > 100 && level <= 500){
+      status = 'MEDIUM';
+      color = Colors.yellow;
+    } else {
+      status = 'HIGH';
+      color = Colors.green;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

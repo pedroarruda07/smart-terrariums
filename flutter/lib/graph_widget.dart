@@ -63,7 +63,12 @@ class _LineChartSample5State extends State<LineChartSample5> {
   }
 
   void _updateShowingTooltipOnSpots() {
-    showingTooltipOnSpots = [0, (allSpots.length/2).ceil(), allSpots.length-1];
+    final spots = allSpots;
+    if (spots.isNotEmpty) {
+      showingTooltipOnSpots = [0, (spots.length / 2).ceil(), spots.length - 1];
+    } else {
+      showingTooltipOnSpots = [];
+    }
   }
 
   List<FlSpot> get allSpots {
@@ -103,27 +108,19 @@ class _LineChartSample5State extends State<LineChartSample5> {
   }
 
   void _previousDay() {
-    final newDate = currentDate.subtract(Duration(days: 1));
-    final String formattedDate = DateFormat('dd-MM-yyyy').format(newDate);
-    if (widget.graphData.containsKey(formattedDate)) {
-      setState(() {
-        currentDate = newDate;
-        _prepareXLabels();
-        _updateShowingTooltipOnSpots();
-      });
-    }
+    setState(() {
+      currentDate = currentDate.subtract(Duration(days: 1));
+      _prepareXLabels();
+      _updateShowingTooltipOnSpots();
+    });
   }
 
   void _nextDay() {
-    final newDate = currentDate.add(Duration(days: 1));
-    final String formattedDate = DateFormat('dd-MM-yyyy').format(newDate);
-    if (widget.graphData.containsKey(formattedDate)) {
-      setState(() {
-        currentDate = newDate;
-        _prepareXLabels();
-        _updateShowingTooltipOnSpots();
-      });
-    }
+    setState(() {
+      currentDate = currentDate.add(Duration(days: 1));
+      _prepareXLabels();
+      _updateShowingTooltipOnSpots();
+    });
   }
 
   @override
