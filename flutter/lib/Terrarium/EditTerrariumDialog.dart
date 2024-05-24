@@ -2,16 +2,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'Terrarium.dart';
 
-class AddTerrariumDialog extends StatefulWidget {
+class EditTerrariumDialog extends StatefulWidget {
   final Terrarium? terrarium;
 
-  const AddTerrariumDialog({Key? key, this.terrarium}) : super(key: key);
+  const EditTerrariumDialog({Key? key, this.terrarium}) : super(key: key);
 
   @override
-  _AddTerrariumDialogState createState() => _AddTerrariumDialogState();
+  _EditTerrariumDialogState createState() => _EditTerrariumDialogState();
 }
 
-class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
+class _EditTerrariumDialogState extends State<EditTerrariumDialog> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController minTemperatureController = TextEditingController();
@@ -30,7 +30,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Terrarium', style: TextStyle(fontWeight: FontWeight.bold)),
+      title: Text('Edit Terrarium', style: TextStyle(fontWeight: FontWeight.bold)),
       content: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -141,12 +141,6 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
             );
 
             dbRef.push().set({
-              'foodLevel': newTerrarium.foodLevel,
-              'heaterStatus': newTerrarium.heaterStatus,
-              'humidity': newTerrarium.humidity,
-              'ledStatus': newTerrarium.ledStatus,
-              'temperature': newTerrarium.temperature,
-              'waterLevel': newTerrarium.waterLevel,
               'name': newTerrarium.name,
               'minTemp': newTerrarium.minTemperature,
               'maxTemp': newTerrarium.maxTemperature,
@@ -158,7 +152,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
 
             Navigator.of(context).pop();
           },
-          child: Text('Add'),
+          child: Text('Edit'),
         ),
       ],
     );
