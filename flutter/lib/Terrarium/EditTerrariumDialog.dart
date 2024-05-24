@@ -139,7 +139,7 @@ class _EditTerrariumDialogState extends State<EditTerrariumDialog> {
           onPressed: () {
             // Validate and save form data
             final newTerrarium = Terrarium(
-              key: nameController.text,
+              key: widget.terrarium!.key,
               name: nameController.text,
               foodLevel: 0,
               waterLevel: 0,
@@ -160,7 +160,7 @@ class _EditTerrariumDialogState extends State<EditTerrariumDialog> {
               activity: {},
             );
 
-            dbRef.push().set({
+            dbRef.child(widget.terrarium!.key).update({
               'name': newTerrarium.name,
               'minTemp': newTerrarium.minTemperature,
               'maxTemp': newTerrarium.maxTemperature,
