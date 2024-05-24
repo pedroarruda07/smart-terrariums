@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'Terrarium.dart';
-import 'activity_graph_widget.dart';
+import '../activity_graph_widget.dart';
 import 'AddTerrariumDialog.dart';
 
 class TerrariumPage extends StatefulWidget {

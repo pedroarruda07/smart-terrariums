@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'PrefabTerrarium.dart'; // Import your PrefabTerrarium class
-import 'PrefabsPage.dart'; // Import your PrefabsPage class
-import 'TerrariumsListPage.dart'; // Import your TerrariumsListPage class
+import 'Prefab/PrefabTerrarium.dart'; // Import your PrefabTerrarium class
+import 'Prefab/PrefabsPage.dart'; // Import your PrefabsPage class
+import 'Terrarium/TerrariumsListPage.dart'; // Import your TerrariumsListPage class
 
 class MainPage extends StatefulWidget {
   @override

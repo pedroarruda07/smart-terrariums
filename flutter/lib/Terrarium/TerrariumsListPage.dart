@@ -2,7 +2,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'AddTerrariumDialog.dart';
 import 'TerrariumCard.dart';
-import 'TerrariumPage.dart';
 import 'Terrarium.dart';
 
 class TerrariumsListPage extends StatefulWidget {
