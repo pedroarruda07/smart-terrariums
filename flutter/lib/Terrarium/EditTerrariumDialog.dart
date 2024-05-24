@@ -28,6 +28,26 @@ class _EditTerrariumDialogState extends State<EditTerrariumDialog> {
   final dbRef = FirebaseDatabase.instance.ref('Terrariums');
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.terrarium != null) {
+      final terrarium = widget.terrarium!;
+      nameController.text = terrarium.name;
+      minTemperatureController.text = terrarium.minTemperature.toString();
+      maxTemperatureController.text = terrarium.maxTemperature.toString();
+      minHumidityController.text = terrarium.minHumidity.toString();
+      maxHumidityController.text = terrarium.maxHumidity.toString();
+      minLightHoursController.text = terrarium.minLightHours.toString();
+      maxLightHoursController.text = terrarium.maxLightHours.toString();
+      minHeaterHoursController.text = terrarium.minHeaterHours.toString();
+      maxHeaterHoursController.text = terrarium.maxHeaterHours.toString();
+      minFeedingHoursController.text = terrarium.minFeedingHours.toString();
+      maxFeedingHoursController.text = terrarium.maxFeedingHours.toString();
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Edit Terrarium', style: TextStyle(fontWeight: FontWeight.bold)),
