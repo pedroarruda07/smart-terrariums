@@ -1,9 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:scmu_app/AddTerrariumDialog.dart';
+import 'AddTerrariumDialog.dart';
+import 'TerrariumCard.dart';
 import 'TerrariumPage.dart';
-import 'TerrariumPageFirebase.dart';
 import 'Terrarium.dart';
 
 class TerrariumsListPage extends StatefulWidget {
@@ -41,16 +40,16 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
         backgroundColor: Colors.green,
         centerTitle: true,
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<List<Terrarium>>(
         stream: getTerrariumsStream(),
-        builder: (context, AsyncSnapshot<List<Terrarium>> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           final terrariums = snapshot.data ?? [];
           return ListView.builder(
@@ -76,35 +75,6 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
       builder: (BuildContext context) {
         return const AddTerrariumDialog();
       },
-    );
-  }
-}
-
-class TerrariumCard extends StatelessWidget {
-  final Terrarium terrarium;
-
-  const TerrariumCard({Key? key, required this.terrarium}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: const EdgeInsets.all(10),
-      elevation: 5,
-      child: ListTile(
-        contentPadding: EdgeInsets.all(8),
-        title: Text(terrarium.name),
-        subtitle: Text('Temperature: ${terrarium.temperature}°C | Humidity: ${terrarium.humidity}%'),
-        trailing: Icon(Icons.panorama_fish_eye, color: Colors.pink),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TerrariumPage(terrarium: terrarium)),
-          );
-        },
-      ),
     );
   }
 }

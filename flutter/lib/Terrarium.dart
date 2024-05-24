@@ -1,79 +1,70 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class Terrarium {
-  final String key;
-  final String name;
-  final String ledStatus;
-  final double temperature;
-  final double humidity;
-  final double minTemperature;
-  final double maxTemperature;
-  final double minHumidity;
-  final double maxHumidity;
-  final int? minLightHours;
-  final int? maxLightHours;
-  final int? minHeaterHours;
-  final int? maxHeaterHours;
-  final int? minFeedingHours;
-  final int? maxFeedingHours;
-  final double foodLevel;
-  final double waterLevel;
-  final String heaterStatus;
-  final Map activity;
+  String key;
+  String name;
+  double foodLevel;
+  double waterLevel;
+  double temperature;
+  double humidity;
+  String ledStatus;
+  String heaterStatus;
+  double minTemperature;
+  double maxTemperature;
+  double minHumidity;
+  double maxHumidity;
+  int minLightHours;
+  int maxLightHours;
+  int minHeaterHours;
+  int maxHeaterHours;
+  int minFeedingHours;
+  int maxFeedingHours;
+  Map<String, dynamic> activity;
 
   Terrarium({
     required this.key,
     required this.name,
-    required this.ledStatus,
+    required this.foodLevel,
+    required this.waterLevel,
     required this.temperature,
     required this.humidity,
+    required this.ledStatus,
+    required this.heaterStatus,
     required this.minTemperature,
     required this.maxTemperature,
     required this.minHumidity,
     required this.maxHumidity,
-    this.minLightHours,
-    this.maxLightHours,
-    this.minHeaterHours,
-    this.maxHeaterHours,
-    this.minFeedingHours,
-    this.maxFeedingHours,
-    required this.foodLevel,
-    required this.heaterStatus,
-    required this.waterLevel,
-    required this.activity
+    required this.minLightHours,
+    required this.maxLightHours,
+    required this.minHeaterHours,
+    required this.maxHeaterHours,
+    required this.minFeedingHours,
+    required this.maxFeedingHours,
+    required this.activity,
   });
 
   factory Terrarium.fromSnapshot(DataSnapshot snapshot) {
-    final value = snapshot.value as Map<dynamic, dynamic>?;
-
-    if (value == null) {
-      throw StateError('Missing data for terrarium snapshot');
-    }
-
-    final Map<String, dynamic> terrariumData = value.map<String, dynamic>(
-          (key, value) => MapEntry(key as String, value),
-    );
-
+    final data = snapshot.value as Map<dynamic, dynamic>;
     return Terrarium(
-      key: snapshot.key!,
-      name: terrariumData['name'],
-      ledStatus: terrariumData['ledStatus'],
-      temperature: (terrariumData['temperature'] as num).toDouble(),
-      humidity: (terrariumData['humidity'] as num).toDouble(),
-      minTemperature: (terrariumData['minTemp'] as num).toDouble(),
-      maxTemperature: (terrariumData['maxTemp'] as num).toDouble(),
-      minHumidity: (terrariumData['minHumidity'] as num).toDouble(),
-      maxHumidity: (terrariumData['maxHumidity'] as num).toDouble(),
-      minLightHours: terrariumData['minLight'],
-      maxLightHours: terrariumData['maxLight'],
-      minHeaterHours: terrariumData['minHeaterHours'],
-      maxHeaterHours: terrariumData['maxHeaterHours'],
-      minFeedingHours: terrariumData['minFeedingHours'],
-      maxFeedingHours: terrariumData['maxFeedingHours'],
-      waterLevel: (terrariumData['waterLevel'] as num).toDouble(),
-      foodLevel: (terrariumData['foodLevel'] as num).toDouble(),
-      heaterStatus: terrariumData['heaterStatus'],
-      activity: terrariumData['activity']
+      key: snapshot.key ?? '',
+      name: data['name'] as String? ?? '',
+      foodLevel: (data['foodLevel'] as num?)?.toDouble() ?? 0.0,
+      waterLevel: (data['waterLevel'] as num?)?.toDouble() ?? 0.0,
+      temperature: (data['temperature'] as num?)?.toDouble() ?? 0.0,
+      humidity: (data['humidity'] as num?)?.toDouble() ?? 0.0,
+      ledStatus: data['ledStatus'] as String? ?? 'OFF',
+      heaterStatus: data['heaterStatus'] as String? ?? 'OFF',
+      minTemperature: (data['minTemperature'] as num?)?.toDouble() ?? 0.0,
+      maxTemperature: (data['maxTemperature'] as num?)?.toDouble() ?? 0.0,
+      minHumidity: (data['minHumidity'] as num?)?.toDouble() ?? 0.0,
+      maxHumidity: (data['maxHumidity'] as num?)?.toDouble() ?? 0.0,
+      minLightHours: (data['minLightHours'] as num?)?.toInt() ?? 0,
+      maxLightHours: (data['maxLightHours'] as num?)?.toInt() ?? 0,
+      minHeaterHours: (data['minHeaterHours'] as num?)?.toInt() ?? 0,
+      maxHeaterHours: (data['maxHeaterHours'] as num?)?.toInt() ?? 0,
+      minFeedingHours: (data['minFeedingHours'] as num?)?.toInt() ?? 0,
+      maxFeedingHours: (data['maxFeedingHours'] as num?)?.toInt() ?? 0,
+      activity: Map<String, dynamic>.from(data['activity'] as Map<dynamic, dynamic>? ?? {}),
     );
   }
 }

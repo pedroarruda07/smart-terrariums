@@ -1,10 +1,10 @@
-import 'dart:async';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:scmu_app/activity_graph_widget.dart';
-
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
 import 'Terrarium.dart';
+import 'activity_graph_widget.dart';
+import 'AddTerrariumDialog.dart';
 
 class TerrariumPage extends StatefulWidget {
   final Terrarium terrarium;
@@ -36,7 +36,6 @@ class _TerrariumPageState extends State<TerrariumPage> {
         await dbRef.child("${led}Status").set(command);
       }
     } catch (e) {
-      // Handle timeout and other exceptions
       if (e is TimeoutException) {
         print('Request to ESP32 timed out.');
       } else {
@@ -132,7 +131,14 @@ class _TerrariumPageState extends State<TerrariumPage> {
                         },
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AddTerrariumDialog(terrarium: terrarium);
+                        },
+                      );
+                    },
                     child: const Text(
                       'Edit Terrarium',
                       style: TextStyle(
@@ -181,37 +187,37 @@ class _TerrariumPageState extends State<TerrariumPage> {
 
   Widget _buildSwitch(String title, bool value, String led) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          SizedBox(width: MediaQuery.sizeOf(context).width * 0.15),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[700],
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            SizedBox(width: MediaQuery.of(context).size.width * 0.15),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[700],
+              ),
             ),
-          ),
-          const SizedBox(width: 40),
-          Switch(
-            value: value,
-            onChanged: (bool newValue) {
-              toggleLed(led, newValue ? 'ON' : 'OFF');
-            },
-            activeColor: Colors.green,
-          ),
-        ],
-      ),
+            const SizedBox(width: 40),
+            Switch(
+              value: value,
+              onChanged: (bool newValue) {
+                toggleLed(led, newValue ? 'ON' : 'OFF');
+              },
+              activeColor: Colors.green,
+            ),
+          ],
+        )
     );
   }
 
   Widget _buildIndicator(String title, double level) {
     String status;
     Color color;
-    if (level <= 100){
+    if (level <= 100) {
       status = 'LOW';
       color = Colors.red;
-    } else if (level > 100 && level <= 500){
+    } else if (level > 100 && level <= 500) {
       status = 'MEDIUM';
       color = Colors.yellow;
     } else {
@@ -223,7 +229,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          SizedBox(width: MediaQuery.sizeOf(context).width * 0.15),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.15),
           Text(
             title,
             style: TextStyle(
