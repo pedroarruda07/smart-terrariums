@@ -112,41 +112,6 @@ class _TerrariumPageState extends State<TerrariumPage> {
                   const SizedBox(height: 32),
                   ActivityGraph(graphData: terrarium.activity),
                   const SizedBox(height: 32),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                          side: BorderSide(color: Colors.grey.shade600),
-                        ),
-                      ),
-                      minimumSize: MaterialStateProperty.all(Size(275, 60)),
-                      backgroundColor: MaterialStateProperty.all(Colors.green.shade300),
-                      overlayColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return Colors.green.shade200;
-                          }
-                          return Colors.green.shade300;
-                        },
-                      ),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AddTerrariumDialog(terrarium: terrarium);
-                        },
-                      );
-                    },
-                    child: const Text(
-                      'Edit Terrarium',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black, // Set text color to black
-                      ),
-                    ),
-                  ),
                 ],
               ),
             );

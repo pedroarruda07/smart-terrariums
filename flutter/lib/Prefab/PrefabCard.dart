@@ -1,5 +1,6 @@
-// PrefabCard.dart
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import '../Terrarium/Terrarium.dart';
 import 'PrefabTerrarium.dart';
 
 class PrefabCard extends StatelessWidget {
@@ -25,11 +26,122 @@ class PrefabCard extends StatelessWidget {
               'Heater: ${prefab.minHeaterHours}h - ${prefab.maxHeaterHours}h\n'
               'Feeding: ${prefab.minFeedingHours}h - ${prefab.maxFeedingHours}h',
         ),
-        trailing: Icon(Icons.add, color: Colors.green),
+
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit, color: Colors.blue),
+              onPressed: () {
+                // Handle edit action
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                // Handle delete action
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.green),
+              onPressed: () {
+                _showChangeNameDialog(context);
+              },
+            )
+          ],
+        ),
         onTap: () {
           // Handle onTap action if needed
         },
       ),
     );
   }
+
+
+  Future<void> _showChangeNameDialog(BuildContext context) async {
+    TextEditingController nameController = TextEditingController();
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Terrarium Name'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'New Name'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text('Save'),
+              onPressed: () {
+                // Save the new name here
+                String newName = nameController.text;
+                // Post the new terrarium to Firebase
+                _postNewTerrarium(newName, prefab);
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _postNewTerrarium(String newName, PrefabTerrarium prefab) {
+    final dbRef = FirebaseDatabase.instance.ref('Terrariums');
+
+    final newTerrarium = Terrarium(
+      key: newName, // Assuming the name is used as the key
+      name: newName,
+      foodLevel: 0,
+      waterLevel: 0,
+      temperature: 0.0,
+      humidity: 0.0,
+      ledStatus: "OFF",
+      heaterStatus: "OFF",
+      minTemperature: prefab.minTemperature,
+      maxTemperature: prefab.maxTemperature,
+      minHumidity: prefab.minHumidity,
+      maxHumidity: prefab.maxHumidity,
+      minLightHours: prefab.minLightHours,
+      maxLightHours: prefab.maxLightHours,
+      minHeaterHours: prefab.minHeaterHours,
+      maxHeaterHours: prefab.maxHeaterHours,
+      minFeedingHours: prefab.minFeedingHours,
+      maxFeedingHours: prefab.maxFeedingHours,
+      activity: {},
+    );
+
+    dbRef.push().set({
+      'foodLevel': newTerrarium.foodLevel,
+      'heaterStatus': newTerrarium.heaterStatus,
+      'humidity': newTerrarium.humidity,
+      'ledStatus': newTerrarium.ledStatus,
+      'temperature': newTerrarium.temperature,
+      'waterLevel': newTerrarium.waterLevel,
+      'name': newTerrarium.name,
+      'minTemp': newTerrarium.minTemperature,
+      'maxTemp': newTerrarium.maxTemperature,
+      'minHumidity': newTerrarium.minHumidity,
+      'maxHumidity': newTerrarium.maxHumidity,
+      'minLight': newTerrarium.minLightHours,
+      'maxLight': newTerrarium.maxLightHours,
+    });
+  }
+
+
 }
