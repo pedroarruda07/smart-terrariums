@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'MainPage.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final databaseReference = FirebaseDatabase.instance.ref('Users');
 
   @override
   void dispose() {
@@ -20,34 +21,52 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _login() {
+  List<String> splitStringByComma(String input) {
+    return input.split(',').map((s) => s.trim()).toList();
+  }
+
+  void _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    // Dummy authentication logic
-    if (username == 'admin' && password == 'password') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('Invalid username or password.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
+    try {
+      DatabaseEvent event = await databaseReference.child(username).once();
+      if (event.snapshot.value != null) {
+        Map<dynamic, dynamic>? data = event.snapshot.value as Map<dynamic, dynamic>?;
+        if (data != null && data['password'] == password) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MainPage(userRoles: splitStringByComma(data['roles']))),
+          );
+        } else {
+          _showErrorDialog('Invalid username or password.');
+        }
+      } else {
+        _showErrorDialog('Invalid username or password.');
+      }
+    } catch (error) {
+      _showErrorDialog('An error occurred while trying to log in. Please try again.');
     }
   }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildOutlinedText(String text) {
     return Text(
       text,

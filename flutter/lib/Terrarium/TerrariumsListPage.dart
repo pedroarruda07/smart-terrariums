@@ -5,7 +5,8 @@ import 'TerrariumCard.dart';
 import 'Terrarium.dart';
 
 class TerrariumsListPage extends StatefulWidget {
-  const TerrariumsListPage({Key? key}) : super(key: key);
+  final List<String> userRoles;
+  const TerrariumsListPage({Key? key, required this.userRoles}) : super(key: key);
 
   @override
   _TerrariumsListPageState createState() => _TerrariumsListPageState();

@@ -4,6 +4,10 @@ import 'Prefab/PrefabsPage.dart'; // Import your PrefabsPage class
 import 'Terrarium/TerrariumsListPage.dart'; // Import your TerrariumsListPage class
 
 class MainPage extends StatefulWidget {
+  final List<String> userRoles;
+
+  const MainPage({Key? key, required this.userRoles}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -48,8 +52,8 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      TerrariumsListPage(),
-      PrefabsPage(prefabs: mockPrefabs), // Pass the mockPrefabs list to PrefabsPage
+      TerrariumsListPage(userRoles: widget.userRoles,),
+      PrefabsPage(prefabs: mockPrefabs),
       Text('Profile Page'),
     ];
   }

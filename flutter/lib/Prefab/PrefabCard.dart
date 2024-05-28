@@ -33,7 +33,7 @@ class PrefabCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit, color: Colors.blue),
               onPressed: () {
-                // Handle edit action
+                _showChangeNameDialog(context); //change to be able to edit everything, not just name
               },
             ),
             IconButton(
@@ -42,12 +42,6 @@ class PrefabCard extends StatelessWidget {
                 // Handle delete action
               },
             ),
-            IconButton(
-              icon: Icon(Icons.add, color: Colors.green),
-              onPressed: () {
-                _showChangeNameDialog(context);
-              },
-            )
           ],
         ),
         onTap: () {

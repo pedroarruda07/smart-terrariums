@@ -154,6 +154,10 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               'maxHumidity': newTerrarium.maxHumidity,
               'minLight': newTerrarium.minLightHours,
               'maxLight': newTerrarium.maxLightHours,
+              'maxHeater': newTerrarium.maxHeaterHours,
+              'minHeater': newTerrarium.minHeaterHours,
+              'maxFeeding': newTerrarium.maxFeedingHours,
+              'minFeeding': newTerrarium.minFeedingHours,
             });
 
             Navigator.of(context).pop();
