@@ -138,6 +138,7 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               minFeedingHours: int.parse(minFeedingHoursController.text),
               maxFeedingHours: int.parse(maxFeedingHoursController.text),
               activity: {},
+              category: ''
             );
 
             dbRef.push().set({
@@ -158,6 +159,8 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
               'minHeater': newTerrarium.minHeaterHours,
               'maxFeeding': newTerrarium.maxFeedingHours,
               'minFeeding': newTerrarium.minFeedingHours,
+              'activity': newTerrarium.activity,
+              'category': newTerrarium.category
             });
 
             Navigator.of(context).pop();

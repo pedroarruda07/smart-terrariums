@@ -158,6 +158,7 @@ class _EditTerrariumDialogState extends State<EditTerrariumDialog> {
               minFeedingHours: int.parse(minFeedingHoursController.text),
               maxFeedingHours: int.parse(maxFeedingHoursController.text),
               activity: {},
+              category: widget.terrarium!.category
             );
 
             dbRef.child(widget.terrarium!.key).update({

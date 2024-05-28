@@ -20,6 +20,7 @@ class Terrarium {
   int minFeedingHours;
   int maxFeedingHours;
   Map<String, dynamic> activity;
+  String category;
 
   Terrarium({
     required this.key,
@@ -41,7 +42,12 @@ class Terrarium {
     required this.minFeedingHours,
     required this.maxFeedingHours,
     required this.activity,
+    required this.category
   });
+
+  bool hasAccess(List<String> roles){
+    return roles.contains(category);
+  }
 
   factory Terrarium.fromSnapshot(DataSnapshot snapshot) {
     final data = snapshot.value as Map<dynamic, dynamic>;
@@ -65,6 +71,7 @@ class Terrarium {
       minFeedingHours: (data['minFeeding'] as num?)?.toInt() ?? 0,
       maxFeedingHours: (data['maxFeeding'] as num?)?.toInt() ?? 0,
       activity: Map<String, dynamic>.from(data['activity'] as Map<dynamic, dynamic>? ?? {}),
+      category: data['category'],
     );
   }
 }

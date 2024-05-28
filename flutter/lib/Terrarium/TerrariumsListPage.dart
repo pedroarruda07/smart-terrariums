@@ -26,7 +26,10 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
       List<Terrarium> terrariums = [];
 
       event.snapshot.children.forEach((child) {
-        terrariums.add(Terrarium.fromSnapshot(child));
+        Terrarium terrarium = Terrarium.fromSnapshot(child);
+        if (terrarium.hasAccess(widget.userRoles)) {
+          terrariums.add(terrarium);
+        }
       });
       return terrariums;
     });

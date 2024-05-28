@@ -118,6 +118,7 @@ class PrefabCard extends StatelessWidget {
       minFeedingHours: prefab.minFeedingHours,
       maxFeedingHours: prefab.maxFeedingHours,
       activity: {},
+      category: ''
     );
 
     dbRef.push().set({
@@ -134,6 +135,8 @@ class PrefabCard extends StatelessWidget {
       'maxHumidity': newTerrarium.maxHumidity,
       'minLight': newTerrarium.minLightHours,
       'maxLight': newTerrarium.maxLightHours,
+      'activity': newTerrarium.activity,
+      'category': newTerrarium.category
     });
   }
 
