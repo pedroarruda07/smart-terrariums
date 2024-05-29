@@ -13,9 +13,11 @@ class PrefabCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey.shade700, width: 1),
       ),
       margin: const EdgeInsets.all(10),
       elevation: 5,
+      color: Colors.green.shade50,
       child: ListTile(
         contentPadding: EdgeInsets.all(8),
         title: Text(prefab.name),
@@ -31,13 +33,13 @@ class PrefabCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.edit, color: Colors.blue),
+              icon: Icon(Icons.edit, color: Colors.green.shade700),
               onPressed: () {
                 _showChangeNameDialog(context); //change to be able to edit everything, not just name
               },
             ),
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
+              icon: Icon(Icons.delete, color: Colors.black),
               onPressed: () {
                 // Handle delete action
               },

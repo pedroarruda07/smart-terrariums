@@ -49,26 +49,36 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder<List<Terrarium>>(
-        stream: getTerrariumsStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final terrariums = snapshot.data ?? [];
-          return ListView.builder(
-            itemCount: terrariums.length,
-            itemBuilder: (context, index) {
-              Terrarium terrarium = terrariums[index];
-              return TerrariumCard(terrarium: terrarium);
+      extendBodyBehindAppBar: true, // Extend background to the app bar
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/leafbg.png',
+            fit: BoxFit.cover,
+          ),
+          StreamBuilder<List<Terrarium>>(
+            stream: getTerrariumsStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final terrariums = snapshot.data ?? [];
+              return ListView.builder(
+                itemCount: terrariums.length,
+                itemBuilder: (context, index) {
+                  Terrarium terrarium = terrariums[index];
+                  return TerrariumCard(terrarium: terrarium);
+                },
+              );
             },
-          );
-        },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddTerrariumDialog(context),

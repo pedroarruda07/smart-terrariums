@@ -12,19 +12,35 @@ class PrefabsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Prefabs'),
-        backgroundColor: Colors.green,
+        title: Text(
+          'Prefabs',
+          style: TextStyle(color: Colors.white),
+        ),
+        flexibleSpace: Image.asset(
+          'assets/green.jpg',
+          fit: BoxFit.cover,
+        ),
         centerTitle: true,
       ),
+      extendBodyBehindAppBar: true, // Extend background to the app bar
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: prefabs.length,
-              itemBuilder: (context, index) {
-                final prefab = prefabs[index];
-                return PrefabCard(prefab: prefab);
-              },
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  'assets/leafbg.png',
+                  fit: BoxFit.cover,
+                ),
+                ListView.builder(
+                  itemCount: prefabs.length,
+                  itemBuilder: (context, index) {
+                    final prefab = prefabs[index];
+                    return PrefabCard(prefab: prefab);
+                  },
+                ),
+              ],
             ),
           ),
           Padding(
