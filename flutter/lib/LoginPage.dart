@@ -85,9 +85,11 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Icon(
-                    Icons.lock,
-                    size: 80,
+                  const SizedBox(height: 25),
+                  Image.asset(
+                    'assets/leaf.png',
+                    width: 80,
+                    height: 80,
                   ),
                   Text(
                     'Welcome back!',
@@ -96,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 16, // Adjust font size as needed
                     ),
                   ),
-                  const SizedBox(height: 55),
+                  const SizedBox(height: 25),
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: -145 + width * 0.5),
                     child: Row(

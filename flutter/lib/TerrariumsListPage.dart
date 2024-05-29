@@ -38,8 +38,14 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Terrariums'),
-        backgroundColor: Colors.green,
+        title: Text(
+          'Terrariums',
+          style: TextStyle(color: Colors.white),
+        ),
+        flexibleSpace: Image.asset(
+          'assets/green.jpg',
+          fit: BoxFit.cover,
+        ),
         centerTitle: true,
       ),
       body: StreamBuilder(

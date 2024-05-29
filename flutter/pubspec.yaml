@@ -48,6 +48,10 @@ flutter:
 
   assets:
     - assets/lizzard.jpg
+    - assets/green.jpg
+    - assets/leaf.png
+    - assets/leafbg.png
+
 
 
   # To add assets to your application, add an assets section, like this:
