@@ -1,7 +1,13 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'PrefabTerrarium.dart';
+import 'Prefab.dart';
 
 class AddPrefabDialog extends StatefulWidget {
+  final Prefab? prefab;
+
+  const AddPrefabDialog({Key? key, this.prefab}) : super(key: key);
+  
   @override
   _AddPrefabDialogState createState() => _AddPrefabDialogState();
 }
@@ -19,6 +25,8 @@ class _AddPrefabDialogState extends State<AddPrefabDialog> {
   final TextEditingController maxHeaterHoursController = TextEditingController();
   final TextEditingController minFeedingHoursController = TextEditingController();
   final TextEditingController maxFeedingHoursController = TextEditingController();
+
+  final dbRef = FirebaseDatabase.instance.ref('Prefabs');
 
   @override
   Widget build(BuildContext context) {
@@ -129,8 +137,19 @@ class _AddPrefabDialogState extends State<AddPrefabDialog> {
                 maxFeedingHours: int.parse(maxFeedingHoursController.text),
               );
 
-              // TODO: Handle saving the new prefab
-              // You can add your Firebase database logic here
+              dbRef.push().set({
+                'name': newPrefab.name,
+                'minTemp': newPrefab.minTemperature,
+                'maxTemp': newPrefab.maxTemperature,
+                'minHumidity': newPrefab.minHumidity,
+                'maxHumidity': newPrefab.maxHumidity,
+                'minLight': newPrefab.minLightHours,
+                'maxLight': newPrefab.maxLightHours,
+                'maxHeater': newPrefab.maxHeaterHours,
+                'minHeater': newPrefab.minHeaterHours,
+                'maxFeeding': newPrefab.maxFeedingHours,
+                'minFeeding': newPrefab.minFeedingHours
+              });
 
               Navigator.of(context).pop();
             }
