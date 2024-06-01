@@ -1,10 +1,9 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import '../Terrarium/Terrarium.dart';
-import 'PrefabTerrarium.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Prefab.dart';
 
 class PrefabCard extends StatelessWidget {
-  final PrefabTerrarium prefab;
+  final Prefab prefab;
 
   const PrefabCard({Key? key, required this.prefab}) : super(key: key);
 
@@ -28,20 +27,19 @@ class PrefabCard extends StatelessWidget {
               'Heater: ${prefab.minHeaterHours}h - ${prefab.maxHeaterHours}h\n'
               'Feeding: ${prefab.minFeedingHours}h - ${prefab.maxFeedingHours}h',
         ),
-
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: Icon(Icons.edit, color: Colors.green.shade700),
               onPressed: () {
-                _showChangeNameDialog(context); //change to be able to edit everything, not just name
+                _showChangeNameDialog(context);
               },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black),
               onPressed: () {
-                // Handle delete action
+                _deletePrefab(prefab.key);
               },
             ),
           ],
@@ -53,7 +51,6 @@ class PrefabCard extends StatelessWidget {
     );
   }
 
-
   Future<void> _showChangeNameDialog(BuildContext context) async {
     TextEditingController nameController = TextEditingController();
 
@@ -62,7 +59,7 @@ class PrefabCard extends StatelessWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Terrarium Name'),
+          title: Text('Change Prefab Name'),
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -83,11 +80,8 @@ class PrefabCard extends StatelessWidget {
             ElevatedButton(
               child: Text('Save'),
               onPressed: () {
-                // Save the new name here
                 String newName = nameController.text;
-                // Post the new terrarium to Firebase
-                _postNewTerrarium(newName, prefab);
-                // Close the dialog
+                _updatePrefabName(prefab.key, newName);
                 Navigator.of(context).pop();
               },
             ),
@@ -97,50 +91,15 @@ class PrefabCard extends StatelessWidget {
     );
   }
 
-  void _postNewTerrarium(String newName, PrefabTerrarium prefab) {
-    final dbRef = FirebaseDatabase.instance.ref('Terrariums');
-
-    final newTerrarium = Terrarium(
-      key: newName, // Assuming the name is used as the key
-      name: newName,
-      foodLevel: 0,
-      waterLevel: 0,
-      temperature: 0.0,
-      humidity: 0.0,
-      ledStatus: "OFF",
-      heaterStatus: "OFF",
-      minTemperature: prefab.minTemperature,
-      maxTemperature: prefab.maxTemperature,
-      minHumidity: prefab.minHumidity,
-      maxHumidity: prefab.maxHumidity,
-      minLightHours: prefab.minLightHours,
-      maxLightHours: prefab.maxLightHours,
-      minHeaterHours: prefab.minHeaterHours,
-      maxHeaterHours: prefab.maxHeaterHours,
-      minFeedingHours: prefab.minFeedingHours,
-      maxFeedingHours: prefab.maxFeedingHours,
-      activity: {},
-      category: ''
-    );
-
-    dbRef.push().set({
-      'foodLevel': newTerrarium.foodLevel,
-      'heaterStatus': newTerrarium.heaterStatus,
-      'humidity': newTerrarium.humidity,
-      'ledStatus': newTerrarium.ledStatus,
-      'temperature': newTerrarium.temperature,
-      'waterLevel': newTerrarium.waterLevel,
-      'name': newTerrarium.name,
-      'minTemp': newTerrarium.minTemperature,
-      'maxTemp': newTerrarium.maxTemperature,
-      'minHumidity': newTerrarium.minHumidity,
-      'maxHumidity': newTerrarium.maxHumidity,
-      'minLight': newTerrarium.minLightHours,
-      'maxLight': newTerrarium.maxLightHours,
-      'activity': newTerrarium.activity,
-      'category': newTerrarium.category
+  void _updatePrefabName(String id, String newName) {
+    final dbRef = FirebaseFirestore.instance.collection('prefabs');
+    dbRef.doc(id).update({
+      'name': newName,
     });
   }
 
-
+  void _deletePrefab(String id) {
+    final dbRef = FirebaseFirestore.instance.collection('prefabs');
+    dbRef.doc(id).delete();
+  }
 }
