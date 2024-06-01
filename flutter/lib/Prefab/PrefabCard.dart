@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scmu_app/Prefab/EditPrefabDialog.dart';
 import 'Prefab.dart';
+import 'PrefabsPage.dart';
 
 class PrefabCard extends StatelessWidget {
   final Prefab prefab;
@@ -9,6 +11,50 @@ class PrefabCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+    void _deletePrefab(BuildContext context) {
+      DatabaseReference dbRef = FirebaseDatabase.instance.ref('Prefabs');
+      dbRef.child(prefab.key).remove().then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Prefab deleted successfully')),
+        );
+      }).catchError((error) {
+        // Error occurred while deleting
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete prefab: $error')),
+        );
+      });
+    }
+
+
+    void _showDeleteConfirmationDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete Prefab'),
+            content: Text('Are you sure you want to delete this prefab?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the confirmation dialog
+                },
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _deletePrefab(context);
+                  Navigator.of(context).pop(); // Close the confirmation dialog
+                },
+                child: Text('Delete'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -33,73 +79,28 @@ class PrefabCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit, color: Colors.green.shade700),
               onPressed: () {
-                _showChangeNameDialog(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditPrefabDialog(prefab: prefab)),
+                );
               },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black),
               onPressed: () {
-                _deletePrefab(prefab.key);
+                _showDeleteConfirmationDialog(context);
               },
             ),
           ],
         ),
         onTap: () {
-          // Handle onTap action if needed
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PrefabsPage()),
+          );
         },
       ),
     );
   }
-
-  Future<void> _showChangeNameDialog(BuildContext context) async {
-    TextEditingController nameController = TextEditingController();
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Change Prefab Name'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'New Name'),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: Text('Save'),
-              onPressed: () {
-                String newName = nameController.text;
-                _updatePrefabName(prefab.key, newName);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _updatePrefabName(String id, String newName) {
-    final dbRef = FirebaseFirestore.instance.collection('prefabs');
-    dbRef.doc(id).update({
-      'name': newName,
-    });
-  }
-
-  void _deletePrefab(String id) {
-    final dbRef = FirebaseFirestore.instance.collection('prefabs');
-    dbRef.doc(id).delete();
-  }
+  
 }

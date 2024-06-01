@@ -34,7 +34,7 @@ class Prefab {
   factory Prefab.fromSnapshot(DataSnapshot snapshot) {
     final data = snapshot.value as Map<dynamic, dynamic>;
     return Prefab(
-      key: data['key'] ?? '',
+      key: snapshot.key ?? '',
       name: data['name'] as String? ?? '',
       minTemperature: (data['minTemp'] as num?)?.toDouble() ?? 0.0,
       maxTemperature: (data['maxTemp'] as num?)?.toDouble() ?? 0.0,
