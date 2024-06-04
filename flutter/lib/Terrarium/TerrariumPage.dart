@@ -21,7 +21,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
   @override
   void initState() {
     super.initState();
-    dbRef = FirebaseDatabase.instance.ref("/Terrariums/${widget.terrarium.key}");
+    dbRef =
+        FirebaseDatabase.instance.ref("/Terrariums/${widget.terrarium.key}");
   }
 
   Future<void> toggleLed(String led, String command) async {
@@ -32,7 +33,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
       final response = await http.get(url).timeout(timeoutDuration);
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        print('Failed to execute LED command. Status code: ${response.statusCode}');
+        print('Failed to execute LED command. Status code: ${response
+            .statusCode}');
         await dbRef.child("${led}Status").set(command);
       }
     } catch (e) {
@@ -46,7 +48,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
   }
 
   Stream<Terrarium> getTerrarium() {
-    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Terrariums').child(widget.terrarium.key);
+    final DatabaseReference ref = FirebaseDatabase.instance.ref().child(
+        'Terrariums').child(widget.terrarium.key);
     return ref.onValue.map((event) {
       return Terrarium.fromSnapshot(event.snapshot);
     });
@@ -56,67 +59,89 @@ class _TerrariumPageState extends State<TerrariumPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Terrarium ' + widget.terrarium.name),
-        backgroundColor: Colors.green,
+        title: Text(
+          'Terrarium ' + widget.terrarium.name,
+          style: TextStyle(color: Colors.white),
+        ),
+        flexibleSpace: Image.asset(
+          'assets/green.jpg',
+          fit: BoxFit.cover,
+        ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: StreamBuilder<Terrarium>(
-          stream: getTerrarium(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData) {
-              return Center(child: Text('No data available'));
-            }
+      body: Stack(
+        children: [
+          // Background image
+          Image.asset(
+            'assets/leafbg2.png',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          // Foreground content
+          SingleChildScrollView(
+            child: StreamBuilder<Terrarium>(
+              stream: getTerrarium(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData) {
+                  return Center(child: Text('No data available'));
+                }
 
-            final terrarium = snapshot.data!;
+                final terrarium = snapshot.data!;
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        Container(
-                          width: 100,
-                          height: 100,
-                          color: Colors.grey[300],
-                          child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
-                        ),
-                        const SizedBox(height: 40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Column(
                           children: [
-                            _buildStatusCard('TEMPERATURE', terrarium.temperature),
-                            _buildStatusCard('HUMIDITY', terrarium.humidity),
+                            const SizedBox(height: 20),
+                            Container(
+                              width: 100,
+                              height: 100,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.image, size: 50,
+                                  color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _buildStatusCard(
+                                    'TEMPERATURE', terrarium.temperature),
+                                _buildStatusCard(
+                                    'HUMIDITY', terrarium.humidity),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 32),
+                      _buildSwitch('LIGHT  ', terrarium.ledStatus == 'ON', 'led'),
+                      _buildSwitch(
+                          'HEATER', terrarium.heaterStatus == 'ON', 'heater'),
+                      const SizedBox(height: 32),
+                      _buildIndicator('WATER LEVEL', terrarium.waterLevel),
+                      _buildIndicator('FOOD LEVEL  ', terrarium.foodLevel),
+                      const SizedBox(height: 32),
+                      ActivityGraph(graphData: terrarium.activity),
+                      const SizedBox(height: 32),
+                    ],
                   ),
-                  const SizedBox(height: 32),
-                  _buildSwitch('LIGHT', terrarium.ledStatus == 'ON', 'led'),
-                  _buildSwitch('HEATER', terrarium.heaterStatus == 'ON', 'heater'),
-                  const SizedBox(height: 32),
-                  _buildIndicator('WATER LEVEL', terrarium.waterLevel),
-                  _buildIndicator('FOOD LEVEL', terrarium.foodLevel),
-                  const SizedBox(height: 32),
-                  ActivityGraph(graphData: terrarium.activity),
-                  const SizedBox(height: 32),
-                ],
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -152,27 +177,30 @@ class _TerrariumPageState extends State<TerrariumPage> {
 
   Widget _buildSwitch(String title, bool value, String led) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(
-          children: [
-            SizedBox(width: MediaQuery.of(context).size.width * 0.15),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[700],
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          SizedBox(width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.15),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[700],
             ),
-            const SizedBox(width: 40),
-            Switch(
-              value: value,
-              onChanged: (bool newValue) {
-                toggleLed(led, newValue ? 'ON' : 'OFF');
-              },
-              activeColor: Colors.green,
-            ),
-          ],
-        )
+          ),
+          const SizedBox(width: 40),
+          Switch(
+            value: value,
+            onChanged: (bool newValue) {
+              toggleLed(led, newValue ? 'ON' : 'OFF');
+            },
+            activeColor: Colors.green,
+          ),
+        ],
+      ),
     );
   }
 
@@ -194,7 +222,10 @@ class _TerrariumPageState extends State<TerrariumPage> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          SizedBox(width: MediaQuery.of(context).size.width * 0.15),
+          SizedBox(width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.15),
           Text(
             title,
             style: TextStyle(
