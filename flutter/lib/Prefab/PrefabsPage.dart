@@ -1,12 +1,33 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:scmu_app/Prefab/AddPrefabDialog.dart';
-import 'PrefabTerrarium.dart';
+import 'AddPrefabDialog.dart';
 import 'PrefabCard.dart';
+import 'Prefab.dart';
 
-class PrefabsPage extends StatelessWidget {
-  final List<PrefabTerrarium> prefabs;
+class PrefabsPage extends StatefulWidget {
+  @override
+  _PrefabsPageState createState() => _PrefabsPageState();
+}
 
-  const PrefabsPage({Key? key, required this.prefabs}) : super(key: key);
+class _PrefabsPageState extends State<PrefabsPage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Stream<List<Prefab>> getPrefabsStream() {
+    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Prefabs');
+    return ref.onValue.map((event) {
+      List<Prefab> prefabs = [];
+
+      event.snapshot.children.forEach((child) {
+        Prefab prefab = Prefab.fromSnapshot(child);
+        prefabs.add(prefab);
+      });
+      return prefabs;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,38 +43,43 @@ class PrefabsPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      extendBodyBehindAppBar: true, // Extend background to the app bar
-      body: Column(
+      extendBodyBehindAppBar: true,
+      body:  Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'assets/leafbg.png',
-                  fit: BoxFit.cover,
-                ),
-                ListView.builder(
-                  itemCount: prefabs.length,
-                  itemBuilder: (context, index) {
-                    final prefab = prefabs[index];
-                    return PrefabCard(prefab: prefab);
-                  },
-                ),
-              ],
-            ),
+          Image.asset(
+            'assets/leafbg.png',
+            fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
-              onPressed: () {
-                _showAddPrefabDialog(context);
-              },
-              child: Icon(Icons.add),
-              backgroundColor: Colors.green,
-            ),
+          StreamBuilder<List<Prefab>>(
+            stream: getPrefabsStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final prefabs = snapshot.data ?? [];
+              return ListView.builder(
+                itemCount: prefabs.length,
+                itemBuilder: (context, index) {
+                  Prefab prefab = prefabs[index];
+                  return PrefabCard(prefab: prefab);
+                },
+              );
+            },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddPrefabDialog(context);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
       ),
     );
   }

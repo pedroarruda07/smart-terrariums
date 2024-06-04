@@ -1,15 +1,60 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import '../Terrarium/Terrarium.dart';
-import 'PrefabTerrarium.dart';
+import 'package:scmu_app/Prefab/EditPrefabDialog.dart';
+import 'Prefab.dart';
+import 'PrefabsPage.dart';
 
 class PrefabCard extends StatelessWidget {
-  final PrefabTerrarium prefab;
+  final Prefab prefab;
 
   const PrefabCard({Key? key, required this.prefab}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+
+    void _deletePrefab(BuildContext context) {
+      DatabaseReference dbRef = FirebaseDatabase.instance.ref('Prefabs');
+      dbRef.child(prefab.key).remove().then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Prefab deleted successfully')),
+        );
+      }).catchError((error) {
+        // Error occurred while deleting
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete prefab: $error')),
+        );
+      });
+    }
+
+
+    void _showDeleteConfirmationDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete Prefab'),
+            content: Text('Are you sure you want to delete this prefab?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the confirmation dialog
+                },
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _deletePrefab(context);
+                  Navigator.of(context).pop(); // Close the confirmation dialog
+                },
+                child: Text('Delete'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -28,119 +73,30 @@ class PrefabCard extends StatelessWidget {
               'Heater: ${prefab.minHeaterHours}h - ${prefab.maxHeaterHours}h\n'
               'Feeding: ${prefab.minFeedingHours}h - ${prefab.maxFeedingHours}h',
         ),
-
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: Icon(Icons.edit, color: Colors.green.shade700),
               onPressed: () {
-                _showChangeNameDialog(context); //change to be able to edit everything, not just name
+                  showDialog(
+                  context: context,
+                  builder: (BuildContext context)
+                  {
+                    return EditPrefabDialog(prefab: prefab);
+                  });
               },
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.black),
               onPressed: () {
-                // Handle delete action
+                _showDeleteConfirmationDialog(context);
               },
             ),
           ],
         ),
-        onTap: () {
-          // Handle onTap action if needed
-        },
       ),
     );
   }
-
-
-  Future<void> _showChangeNameDialog(BuildContext context) async {
-    TextEditingController nameController = TextEditingController();
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Change Terrarium Name'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'New Name'),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: Text('Save'),
-              onPressed: () {
-                // Save the new name here
-                String newName = nameController.text;
-                // Post the new terrarium to Firebase
-                _postNewTerrarium(newName, prefab);
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _postNewTerrarium(String newName, PrefabTerrarium prefab) {
-    final dbRef = FirebaseDatabase.instance.ref('Terrariums');
-
-    final newTerrarium = Terrarium(
-      key: newName, // Assuming the name is used as the key
-      name: newName,
-      foodLevel: 0,
-      waterLevel: 0,
-      temperature: 0.0,
-      humidity: 0.0,
-      ledStatus: "OFF",
-      heaterStatus: "OFF",
-      minTemperature: prefab.minTemperature,
-      maxTemperature: prefab.maxTemperature,
-      minHumidity: prefab.minHumidity,
-      maxHumidity: prefab.maxHumidity,
-      minLightHours: prefab.minLightHours,
-      maxLightHours: prefab.maxLightHours,
-      minHeaterHours: prefab.minHeaterHours,
-      maxHeaterHours: prefab.maxHeaterHours,
-      minFeedingHours: prefab.minFeedingHours,
-      maxFeedingHours: prefab.maxFeedingHours,
-      activity: {},
-      category: ''
-    );
-
-    dbRef.push().set({
-      'foodLevel': newTerrarium.foodLevel,
-      'heaterStatus': newTerrarium.heaterStatus,
-      'humidity': newTerrarium.humidity,
-      'ledStatus': newTerrarium.ledStatus,
-      'temperature': newTerrarium.temperature,
-      'waterLevel': newTerrarium.waterLevel,
-      'name': newTerrarium.name,
-      'minTemp': newTerrarium.minTemperature,
-      'maxTemp': newTerrarium.maxTemperature,
-      'minHumidity': newTerrarium.minHumidity,
-      'maxHumidity': newTerrarium.maxHumidity,
-      'minLight': newTerrarium.minLightHours,
-      'maxLight': newTerrarium.maxLightHours,
-      'activity': newTerrarium.activity,
-      'category': newTerrarium.category
-    });
-  }
-
-
+  
 }

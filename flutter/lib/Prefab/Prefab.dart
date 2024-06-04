@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Prefab {
-  final String name;
-  final double minTemperature;
-  final double maxTemperature;
-  final double minHumidity;
-  final double maxHumidity;
-  final int minLightHours;
-  final int maxLightHours;
-  final int minHeaterHours;
-  final int maxHeaterHours;
-  final int minFeedingHours;
-  final int maxFeedingHours;
+  String key;
+  String name;
+  double minTemperature;
+  double maxTemperature;
+  double minHumidity;
+  double maxHumidity;
+  int minLightHours;
+  int maxLightHours;
+  int minHeaterHours;
+  int maxHeaterHours;
+  int minFeedingHours;
+  int maxFeedingHours;
 
   Prefab({
+    required this.key,
     required this.name,
     required this.minTemperature,
     required this.maxTemperature,
@@ -27,28 +30,22 @@ class Prefab {
     required this.maxFeedingHours,
   });
 
-  // Method to add a new Prefab document to Firestore
-  Future<void> addPrefabToFirestore() async {
-    try {
-      // Reference to the prefabs collection
-      CollectionReference prefabs = FirebaseFirestore.instance.collection('prefabs');
 
-      // Add the Prefab data to Firestore
-      await prefabs.add({
-        'name': name,
-        'minTemperature': minTemperature,
-        'maxTemperature': maxTemperature,
-        'minHumidity': minHumidity,
-        'maxHumidity': maxHumidity,
-        'minLightHours': minLightHours,
-        'maxLightHours': maxLightHours,
-        'minHeaterHours': minHeaterHours,
-        'maxHeaterHours': maxHeaterHours,
-        'minFeedingHours': minFeedingHours,
-        'maxFeedingHours': maxFeedingHours,
-      });
-    } catch (e) {
-      print('Error adding prefab to Firestore: $e');
-    }
+  factory Prefab.fromSnapshot(DataSnapshot snapshot) {
+    final data = snapshot.value as Map<dynamic, dynamic>;
+    return Prefab(
+      key: snapshot.key ?? '',
+      name: data['name'] as String? ?? '',
+      minTemperature: (data['minTemp'] as num?)?.toDouble() ?? 0.0,
+      maxTemperature: (data['maxTemp'] as num?)?.toDouble() ?? 0.0,
+      minHumidity: (data['minHumidity'] as num?)?.toDouble() ?? 0.0,
+      maxHumidity: (data['maxHumidity'] as num?)?.toDouble() ?? 0.0,
+      minLightHours: (data['minLight'] as num?)?.toInt() ?? 0,
+      maxLightHours: (data['maxLight'] as num?)?.toInt() ?? 0,
+      minHeaterHours: (data['minHeater'] as num?)?.toInt() ?? 0,
+      maxHeaterHours: (data['maxHeater'] as num?)?.toInt() ?? 0,
+      minFeedingHours: (data['minFeeding'] as num?)?.toInt() ?? 0,
+      maxFeedingHours: (data['maxFeeding'] as num?)?.toInt() ?? 0,
+    );
   }
 }
