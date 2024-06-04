@@ -7,7 +7,7 @@ class AddPrefabDialog extends StatefulWidget {
   final Prefab? prefab;
 
   const AddPrefabDialog({Key? key, this.prefab}) : super(key: key);
-  
+
   @override
   _AddPrefabDialogState createState() => _AddPrefabDialogState();
 }
@@ -15,103 +15,127 @@ class AddPrefabDialog extends StatefulWidget {
 class _AddPrefabDialogState extends State<AddPrefabDialog> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController minTemperatureController = TextEditingController();
-  final TextEditingController maxTemperatureController = TextEditingController();
+  final TextEditingController minTemperatureController =
+      TextEditingController();
+  final TextEditingController maxTemperatureController =
+      TextEditingController();
   final TextEditingController minHumidityController = TextEditingController();
   final TextEditingController maxHumidityController = TextEditingController();
   final TextEditingController minLightHoursController = TextEditingController();
   final TextEditingController maxLightHoursController = TextEditingController();
-  final TextEditingController minHeaterHoursController = TextEditingController();
-  final TextEditingController maxHeaterHoursController = TextEditingController();
-  final TextEditingController minFeedingHoursController = TextEditingController();
-  final TextEditingController maxFeedingHoursController = TextEditingController();
+  final TextEditingController minHeaterHoursController =
+      TextEditingController();
+  final TextEditingController maxHeaterHoursController =
+      TextEditingController();
+  final TextEditingController minFeedingHoursController =
+      TextEditingController();
+  final TextEditingController maxFeedingHoursController =
+      TextEditingController();
 
   final dbRef = FirebaseDatabase.instance.ref('Prefabs');
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Prefab', style: TextStyle(fontWeight: FontWeight.bold)),
-      content: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildTextField(nameController, 'Name'),
-                SizedBox(height: 10),
-                _buildRow([
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Temperature', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      _buildRow([
-                        _buildTextField(minTemperatureController, 'Min', keyboardType: TextInputType.number),
-                        _buildTextField(maxTemperatureController, 'Max', keyboardType: TextInputType.number),
-                      ]),
-                    ],
-                  ),
-                ]),
-                _buildRow([
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Humidity', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      _buildRow([
-                        _buildTextField(minHumidityController, 'Min', keyboardType: TextInputType.number),
-                        _buildTextField(maxHumidityController, 'Max', keyboardType: TextInputType.number),
-                      ]),
-                    ],
-                  ),
-                ]),
-                _buildRow([
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Light Hours', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      _buildRow([
-                        _buildTextField(minLightHoursController, 'Min', keyboardType: TextInputType.number),
-                        _buildTextField(maxLightHoursController, 'Max', keyboardType: TextInputType.number),
-                      ]),
-                    ],
-                  ),
-                ]),
-                _buildRow([
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Heater Hours', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      _buildRow([
-                        _buildTextField(minHeaterHoursController, 'Min', keyboardType: TextInputType.number),
-                        _buildTextField(maxHeaterHoursController, 'Max', keyboardType: TextInputType.number),
-                      ]),
-                    ],
-                  ),
-                ]),
-                _buildRow([
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Feeding Hours', style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      _buildRow([
-                        _buildTextField(minFeedingHoursController, 'Min', keyboardType: TextInputType.number),
-                        _buildTextField(maxFeedingHoursController, 'Max', keyboardType: TextInputType.number),
-                      ]),
-                    ],
-                  ),
-                ]),
-              ],
+      title:
+          Text('Add New Prefab', style: TextStyle(fontWeight: FontWeight.bold)),
+      content: Container(
+          width: 400,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTextField(nameController, 'Name'),
+                    SizedBox(height: 10),
+                    _buildRow([
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Temperature',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          _buildRow([
+                            _buildTextField(minTemperatureController, 'Min',
+                                keyboardType: TextInputType.number),
+                            _buildTextField(maxTemperatureController, 'Max',
+                                keyboardType: TextInputType.number),
+                          ]),
+                        ],
+                      ),
+                    ]),
+                    _buildRow([
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Humidity',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          _buildRow([
+                            _buildTextField(minHumidityController, 'Min',
+                                keyboardType: TextInputType.number),
+                            _buildTextField(maxHumidityController, 'Max',
+                                keyboardType: TextInputType.number),
+                          ]),
+                        ],
+                      ),
+                    ]),
+                    _buildRow([
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Light Hours',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          _buildRow([
+                            _buildTextField(minLightHoursController, 'On',
+                                keyboardType: TextInputType.number),
+                            _buildTextField(maxLightHoursController, 'Off',
+                                keyboardType: TextInputType.number),
+                          ]),
+                        ],
+                      ),
+                    ]),
+                    _buildRow([
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Heater Hours',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          _buildRow([
+                            _buildTextField(minHeaterHoursController, 'On',
+                                keyboardType: TextInputType.number),
+                            _buildTextField(maxHeaterHoursController, 'Off',
+                                keyboardType: TextInputType.number),
+                          ]),
+                        ],
+                      ),
+                    ]),
+                    _buildRow([
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Feeding Hours',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          _buildRow([
+                            _buildTextField(minFeedingHoursController, 'Feed 1',
+                                keyboardType: TextInputType.number),
+                            _buildTextField(maxFeedingHoursController, 'Feed 2',
+                                keyboardType: TextInputType.number),
+                          ]),
+                        ],
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+          )),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -160,7 +184,8 @@ class _AddPrefabDialogState extends State<AddPrefabDialog> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String labelText, {TextInputType keyboardType = TextInputType.text}) {
+  Widget _buildTextField(TextEditingController controller, String labelText,
+      {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -180,10 +205,13 @@ class _AddPrefabDialogState extends State<AddPrefabDialog> {
 
   Widget _buildRow(List<Widget> children) {
     return Row(
-      children: children.map((child) => Expanded(child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-        child: child,
-      ))).toList(),
+      children: children
+          .map((child) => Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: child,
+              )))
+          .toList(),
     );
   }
 }

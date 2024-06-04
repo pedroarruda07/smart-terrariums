@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
+import 'EditTerrariumDialog.dart';
 import 'Terrarium.dart';
 import '../activity_graph_widget.dart';
 import 'AddTerrariumDialog.dart';
@@ -59,6 +60,19 @@ class _TerrariumPageState extends State<TerrariumPage> {
         title: Text('Terrarium ' + widget.terrarium.name),
         backgroundColor: Colors.green,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return EditTerrariumDialog(terrarium: widget.terrarium);
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: StreamBuilder<Terrarium>(

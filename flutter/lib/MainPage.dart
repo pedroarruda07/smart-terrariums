@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'Prefab/PrefabTerrarium.dart'; // Import your PrefabTerrarium class
 import 'Prefab/PrefabsPage.dart'; // Import your PrefabsPage class
+import 'ProfilePage.dart';
 import 'Terrarium/TerrariumsListPage.dart'; // Import your TerrariumsListPage class
 
 class MainPage extends StatefulWidget {
   final List<String> userRoles;
-
-  const MainPage({Key? key, required this.userRoles}) : super(key: key);
+  final String username;
+  const MainPage({Key? key, required this.userRoles, required this.username}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     _widgetOptions = <Widget>[
       TerrariumsListPage(userRoles: widget.userRoles,),
       PrefabsPage(),
-      Text('Profile Page'),
+      ProfilePage(userRoles: widget.userRoles, username: widget.username),
     ];
   }
 

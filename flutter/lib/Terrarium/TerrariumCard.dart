@@ -62,17 +62,19 @@ class TerrariumCard extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
         title: Text(terrarium.name + "      - " + terrarium.category),
-        subtitle: Text('Temperature: ${terrarium.temperature}°C | Humidity: ${terrarium.humidity}%'),
+        subtitle: Text('Temperature: ${terrarium.minTemperature}°C | Humidity: ${terrarium.humidity}%'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EditTerrariumDialog(terrarium: terrarium)),
-                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context)
+                    {
+                      return EditTerrariumDialog(terrarium: terrarium);
+                    });
               },
             ),
             IconButton(

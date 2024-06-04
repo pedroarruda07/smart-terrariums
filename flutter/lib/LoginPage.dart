@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         if (data != null && data['password'] == password) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MainPage(userRoles: splitStringByComma(data['roles']))),
+            MaterialPageRoute(builder: (context) => MainPage(userRoles: splitStringByComma(data['roles']), username: username)),
           );
         } else {
           _showErrorDialog('Invalid username or password.');

@@ -79,10 +79,12 @@ class PrefabCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit, color: Colors.green.shade700),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EditPrefabDialog(prefab: prefab)),
-                );
+                  showDialog(
+                  context: context,
+                  builder: (BuildContext context)
+                  {
+                    return EditPrefabDialog(prefab: prefab);
+                  });
               },
             ),
             IconButton(
@@ -93,12 +95,6 @@ class PrefabCard extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PrefabsPage()),
-          );
-        },
       ),
     );
   }

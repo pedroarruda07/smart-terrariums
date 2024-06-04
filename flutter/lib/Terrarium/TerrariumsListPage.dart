@@ -6,7 +6,8 @@ import 'Terrarium.dart';
 
 class TerrariumsListPage extends StatefulWidget {
   final List<String> userRoles;
-  const TerrariumsListPage({Key? key, required this.userRoles}) : super(key: key);
+  const TerrariumsListPage({Key? key, required this.userRoles})
+      : super(key: key);
 
   @override
   _TerrariumsListPageState createState() => _TerrariumsListPageState();
@@ -21,7 +22,8 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
   }
 
   Stream<List<Terrarium>> getTerrariumsStream() {
-    final DatabaseReference ref = FirebaseDatabase.instance.ref().child('Terrariums');
+    final DatabaseReference ref =
+        FirebaseDatabase.instance.ref().child('Terrariums');
     return ref.onValue.map((event) {
       List<Terrarium> terrariums = [];
 
@@ -49,7 +51,7 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
         ),
         centerTitle: true,
       ),
-      extendBodyBehindAppBar: true, // Extend background to the app bar
+      extendBodyBehindAppBar: true,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -92,7 +94,9 @@ class _TerrariumsListPageState extends State<TerrariumsListPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AddTerrariumDialog();
+        return AddTerrariumDialog(
+          userRoles: widget.userRoles,
+        );
       },
     );
   }

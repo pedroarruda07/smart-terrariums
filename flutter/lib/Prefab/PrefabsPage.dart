@@ -10,7 +10,6 @@ class PrefabsPage extends StatefulWidget {
 }
 
 class _PrefabsPageState extends State<PrefabsPage> {
-  final DatabaseReference databaseReference = FirebaseDatabase.instance.ref('Prefabs');
 
   @override
   void initState() {
@@ -44,7 +43,7 @@ class _PrefabsPageState extends State<PrefabsPage> {
         ),
         centerTitle: true,
       ),
-      extendBodyBehindAppBar: true, // Extend background to the app bar
+      extendBodyBehindAppBar: true,
       body:  Stack(
         fit: StackFit.expand,
         children: [
