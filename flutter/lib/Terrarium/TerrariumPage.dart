@@ -5,7 +5,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'EditTerrariumDialog.dart';
 import 'Terrarium.dart';
 import '../activity_graph_widget.dart';
-import 'AddTerrariumDialog.dart';
 
 class TerrariumPage extends StatefulWidget {
   final Terrarium terrarium;
@@ -69,9 +68,12 @@ class _TerrariumPageState extends State<TerrariumPage> {
           fit: BoxFit.cover,
         ),
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit, color: Colors.black),
+            icon: Icon(Icons.edit, color: Colors.white),
             onPressed: () {
               showDialog(
                 context: context,
@@ -81,6 +83,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
               );
             },
           ),
+          SizedBox(width: 10),
         ],
       ),
       body: Stack(
