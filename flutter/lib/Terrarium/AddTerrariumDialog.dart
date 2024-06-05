@@ -271,7 +271,8 @@ class _AddTerrariumDialogState extends State<AddTerrariumDialog> {
                 'maxFeeding': newTerrarium.maxFeedingHours,
                 'minFeeding': newTerrarium.minFeedingHours,
                 'activity': newTerrarium.activity,
-                'category': newTerrarium.category
+                'category': newTerrarium.category,
+                'manualOverride': false,
               });
 
               Navigator.of(context).pop();

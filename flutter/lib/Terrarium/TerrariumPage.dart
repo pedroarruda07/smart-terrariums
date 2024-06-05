@@ -44,6 +44,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
         print('Error executing LED command: $e');
       }
       await dbRef.child("${led}Status").set(command);
+      await dbRef.child("manualOverride").set(true);
     }
   }
 
