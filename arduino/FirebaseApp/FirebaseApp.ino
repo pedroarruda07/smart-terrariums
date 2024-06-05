@@ -14,8 +14,8 @@ Firebase firebase(FIREBASE_HOST);
 String terrarium = "/Terrariums/-NxOimqv_QLBmqdP6ToG";
 
 //wifi
-#define WIFI_SSID "Vodafone-71F112"
-#define WIFI_PASSWORD "6Z7kGHZvM2"
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
 
 //time
 const char* ntpServer = "pool.ntp.org";
