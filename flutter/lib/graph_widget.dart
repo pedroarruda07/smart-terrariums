@@ -65,7 +65,11 @@ class _LineChartSample5State extends State<LineChartSample5> {
   void _updateShowingTooltipOnSpots() {
     final spots = allSpots;
     if (spots.isNotEmpty) {
-      showingTooltipOnSpots = [0, (spots.length / 2).ceil(), spots.length - 1];
+      showingTooltipOnSpots = [
+        0,
+        if (spots.length > 1) (spots.length / 2).ceil(),
+        if (spots.length > 1) spots.length - 1,
+      ];
     } else {
       showingTooltipOnSpots = [];
     }
@@ -302,7 +306,7 @@ class _LineChartSample5State extends State<LineChartSample5> {
                       ),
                     ),
                     minX: 0,
-                    maxX: (xLabels.length - 1).toDouble(),
+                    maxX: (xLabels.length > 1 ? xLabels.length - 1 : 1).toDouble(),
                   ),
                 );
               }),

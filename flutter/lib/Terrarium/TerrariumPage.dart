@@ -15,7 +15,7 @@ class TerrariumPage extends StatefulWidget {
 }
 
 class _TerrariumPageState extends State<TerrariumPage> {
-  final String espUrl = 'http://192.168.1.129'; // Replace with actual ESP32 IP address
+  final String espUrl = 'http://192.168.1.190';
   late DatabaseReference dbRef;
 
   @override
@@ -26,8 +26,8 @@ class _TerrariumPageState extends State<TerrariumPage> {
   }
 
   Future<void> toggleLed(String led, String command) async {
-    var url = Uri.parse('$espUrl/$led/$command');
-    const timeoutDuration = Duration(seconds: 2);
+    var url = Uri.parse('$espUrl/$led/${command.toLowerCase()}');
+    const timeoutDuration = Duration(seconds: 3);
 
     try {
       final response = await http.get(url).timeout(timeoutDuration);
@@ -36,6 +36,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
         print('Failed to execute LED command. Status code: ${response
             .statusCode}');
         await dbRef.child("${led}Status").set(command);
+        await dbRef.child("manualOverride").set(command);
       }
     } catch (e) {
       if (e is TimeoutException) {
@@ -44,7 +45,7 @@ class _TerrariumPageState extends State<TerrariumPage> {
         print('Error executing LED command: $e');
       }
       await dbRef.child("${led}Status").set(command);
-      await dbRef.child("manualOverride").set(true);
+      await dbRef.child("manualOverride").set("ON");
     }
   }
 
