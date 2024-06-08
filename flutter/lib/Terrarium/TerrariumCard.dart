@@ -56,13 +56,15 @@ class TerrariumCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey.shade700, width: 1),
       ),
       margin: const EdgeInsets.all(10),
       elevation: 5,
+      color: Colors.green.shade50,
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
-        title: Text(terrarium.name + "      - " + terrarium.category),
-        subtitle: Text('Temperature: ${terrarium.minTemperature}°C | Humidity: ${terrarium.humidity}%'),
+        title: Text(terrarium.name + "\n" + terrarium.category),
+        subtitle: Text('Temperature: ${terrarium.temperature}°C \nHumidity: ${terrarium.humidity}%'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

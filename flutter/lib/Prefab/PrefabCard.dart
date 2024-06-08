@@ -71,13 +71,13 @@ class PrefabCard extends StatelessWidget {
               'Humidity: ${prefab.minHumidity}% - ${prefab.maxHumidity}%\n'
               'Light: ${prefab.minLightHours}h - ${prefab.maxLightHours}h\n'
               'Heater: ${prefab.minHeaterHours}h - ${prefab.maxHeaterHours}h\n'
-              'Feeding: ${prefab.minFeedingHours}h - ${prefab.maxFeedingHours}h',
+              'Feeding: ${prefab.minFeedingHours}h and ${prefab.maxFeedingHours}h',
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.edit, color: Colors.green.shade700),
+              icon: Icon(Icons.edit),
               onPressed: () {
                   showDialog(
                   context: context,
@@ -88,7 +88,7 @@ class PrefabCard extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.black),
+              icon: Icon(Icons.delete),
               onPressed: () {
                 _showDeleteConfirmationDialog(context);
               },
