@@ -5,6 +5,10 @@ import 'firebase_options.dart';
 import 'LoginPage.dart';
 
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Recebeu uma mensagem em segundo plano: ${message.messageId}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +16,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-   FirebaseMessaging messaging = FirebaseMessaging.instance; //only works for android(?)
+  FirebaseMessaging messaging = FirebaseMessaging.instance; //only works for android(?)
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await messaging.subscribeToTopic("temperature")
       .then((value) => print("Inscrito no tópico 'temperature'"))
       .catchError((error) => print("Falha na inscrição: $error"));
