@@ -1,51 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'firebase_options.dart';
-import 'LoginPage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'LoginPage.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Recebeu uma mensagem em segundo plano: ${message.messageId}');
+  print('Handling a background message: ${message.messageId}');
 }
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.high,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance; //only works for android(?)
+  await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await messaging.subscribeToTopic("temperature")
-      .then((value) => print("Inscrito no tópico 'temperature'"))
-      .catchError((error) => print("Falha na inscrição: $error"));
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Recebeu uma mensagem enquanto estava em primeiro plano!');
-    if (message.notification != null) {
-      print('Título: ${message.notification?.title}');
-      print('Corpo: ${message.notification?.body}');
-    }
-  });
-
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('Uma nova mensagem foi aberta!');
-    if (message.notification != null) {
-      print('Título: ${message.notification?.title}');
-      print('Corpo: ${message.notification?.body}');
-    }
-  });
-
-
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _firebaseMessaging.requestPermission();
+
+    _firebaseMessaging.subscribeToTopic('temperature');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification!;
+
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            icon: 'ic_launcher',
+          ),
+        ),
+      );
+        });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification notification = message!.notification!;
+      if (notification != null) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text(notification!.title!),
+              content: Text(notification!.body!),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

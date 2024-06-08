@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'MainPage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -34,6 +35,10 @@ class _LoginPageState extends State<LoginPage> {
       if (event.snapshot.value != null) {
         Map<dynamic, dynamic>? data = event.snapshot.value as Map<dynamic, dynamic>?;
         if (data != null && data['password'] == password) {
+          FirebaseMessaging messaging = FirebaseMessaging.instance;
+          await messaging.subscribeToTopic("temperature")
+              .then((value) => print("Inscrito no tópico 'temperature'"))
+              .catchError((error) => print("Falha na inscrição: $error"));
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => MainPage(userRoles: splitStringByComma(data['roles']), username: username)),

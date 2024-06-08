@@ -64,7 +64,7 @@ class TerrariumCard extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
         title: Text(terrarium.name + "\n" + terrarium.category),
-        subtitle: Text('Temperature: ${terrarium.minTemperature}°C \nHumidity: ${terrarium.humidity}%'),
+        subtitle: Text('Temperature: ${terrarium.temperature}°C \nHumidity: ${terrarium.humidity}%'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

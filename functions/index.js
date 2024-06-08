@@ -16,29 +16,31 @@ exports.notifyOnThreshold = functions.database
       console.log("Trigger function executed");
       console.log("Previous Value:", previousValue);
       console.log("New Value:", newValue);
-      console.log("New Value.temperature:", newValue.temperature);
 
       if (newValue && previousValue) {
         console.log("Both previous and new values are valid.");
-        if (
-          newValue > 30 ||
-          newValue <= 0
-        ) {
-          const message = {
-            data: {
-              title: "Alerta de Limite",
-              body: "O valor de temperature ultrapassou o limite!",
-            },
-            topic: "temperature",
-          };
+        if (newValue > 30 || newValue <= 0) {
+          return admin.database()
+              .ref("/Terrariums/-NxOimqv_QLBmqdP6ToG/name").once("value")
+              .then((snapshot) => {
+                const terrariumName = snapshot.val();
+                const message = {
+                  notification: {
+                    title: "Temperature Alert",
+                    body: "The temperature in " +
+                    terrariumName + " has exceeded the limit!",
+                  },
+                  topic: "temperature",
+                };
 
-          return admin.messaging().send(message)
+                return admin.messaging().send(message);
+              })
               .then((response) => {
-                console.log("Notificação enviada com sucesso:", response);
+                console.log("Notification sent successfully:", response);
                 return null;
               })
               .catch((error) => {
-                console.log("Erro ao enviar notificação:", error);
+                console.log("Error sending notification:", error);
                 return null;
               });
         } else {
