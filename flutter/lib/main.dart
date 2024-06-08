@@ -12,7 +12,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  /* FirebaseMessaging messaging = FirebaseMessaging.instance; only works for android(?)
+   FirebaseMessaging messaging = FirebaseMessaging.instance; //only works for android(?)
   await messaging.subscribeToTopic("temperature")
       .then((value) => print("Inscrito no tópico 'temperature'"))
       .catchError((error) => print("Falha na inscrição: $error"));
@@ -31,7 +31,7 @@ void main() async {
       print('Título: ${message.notification?.title}');
       print('Corpo: ${message.notification?.body}');
     }
-  });*/
+  });
 
 
   runApp(const MyApp());
