@@ -96,136 +96,148 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey[100],
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
               'assets/lizzard.jpg',
-              fit: BoxFit.cover, // This is to make sure the image covers the entire container
+              fit: BoxFit.cover,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 25),
-                  Image.asset(
-                    'assets/leaf.png',
-                    width: 80,
-                    height: 80,
-                  ),
-                  Text(
-                    'Welcome back!',
-                    style: TextStyle(
-                      color: Colors.grey[600], // Adjust text color as needed
-                      fontSize: 16, // Adjust font size as needed
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: -145 + width * 0.5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
+          SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 25),
+                      Image.asset(
+                        'assets/leaf.png',
+                        width: 80,
+                        height: 80,
+                      ),
+                      Text(
+                        'Welcome back!',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: -145 + width * 0.5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // Shadow (Outline) Text
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
+                            Stack(
+                              alignment: Alignment.center,
                               children: [
-                                _buildOutlinedText('Login'),
-                              ],
-                            ),
-                            // Foreground Text
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildForegroundText('Login'),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    _buildOutlinedText('Login'),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    _buildForegroundText('Login'),
+                                  ],
+                                ),
                               ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: -150 + width * 0.5),
+                        child: SizedBox(
+                          height: 60, // Set the height for the text field
+                          child: TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: 'Username',
+                            ),
+                            controller: _usernameController,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: -150 + width * 0.5),
+                        child: SizedBox(
+                          height: 60, // Set the height for the text field
+                          child: TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: 'Password',
+                            ),
+                            controller: _passwordController,
+                            obscureText: true,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              side: BorderSide(color: Colors.grey.shade600),
+                            ),
+                          ),
+                          minimumSize: MaterialStateProperty.all(Size(275, 45)), // Set smaller height for the button
+                          backgroundColor: MaterialStateProperty.all(Colors.green.shade300),
+                          overlayColor: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return Colors.green.shade200;
+                              }
+                              return Colors.green.shade300;
+                            },
+                          ),
+                        ),
+                        onPressed: _login,
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 150),
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: -150 + width * 0.5),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        fillColor: Colors.white,
-                        filled: true,
-                        labelText: 'Username',
-                      ),
-                      controller: _usernameController,
-                      //decoration: const InputDecoration(labelText: 'Username'),
-                    ),
-                  ),
-                  const SizedBox(height: 7),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: -150 + width * 0.5),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        fillColor: Colors.white,
-                        filled: true,
-                        labelText: 'Password',
-                      ),
-                      controller: _passwordController,
-                      obscureText: true,
-                      //decoration: const InputDecoration(labelText: 'Username'),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                          side: BorderSide(color: Colors.grey.shade600),
-                        ),
-                      ),
-                      minimumSize: MaterialStateProperty.all(Size(275, 60)),
-                      backgroundColor: MaterialStateProperty.all(Colors.green.shade300),
-                      overlayColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return Colors.green.shade200;
-                          }
-                          return Colors.green.shade300;
-                        },
-                      ),
-                    ),
-                    onPressed: _login,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black, // Set text color to black
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 150),
-                ],
+                ),
               ),
             ),
           ),

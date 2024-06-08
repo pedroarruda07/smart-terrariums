@@ -13,12 +13,7 @@ exports.notifyOnThreshold = functions.database
       const newValue = change.after.val();
       const previousValue = change.before.val();
 
-      console.log("Trigger function executed");
-      console.log("Previous Value:", previousValue);
-      console.log("New Value:", newValue);
-
       if (newValue && previousValue) {
-        console.log("Both previous and new values are valid.");
         if (newValue > 30 || newValue <= 0) {
           return admin.database()
               .ref("/Terrariums/-NxOimqv_QLBmqdP6ToG/name").once("value")
