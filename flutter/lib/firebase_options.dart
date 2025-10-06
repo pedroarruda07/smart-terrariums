@@ -40,22 +40,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBIDrVJ2eBMgS1uLn5zRY1nZNJgvV0683g',
-    appId: '1:540926420878:web:4886eb74ca96a5df9b26df',
-    messagingSenderId: '540926420878',
-    projectId: 'scmu-terrariums',
-    authDomain: 'scmu-terrariums.firebaseapp.com',
-    databaseURL: 'https://scmu-terrariums-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'scmu-terrariums.appspot.com',
+    apiKey: '---',
+    appId: '---',
+    messagingSenderId: '----',
+    projectId: '---',
+    authDomain: '---.firebaseapp.com',
+    databaseURL: 'https://------rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: '---.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAnEA4DJnNbj9fXh-pI2hE_Eixtx-6akYE',
-    appId: '1:540926420878:android:b66448c693ce9ead9b26df',
-    messagingSenderId: '540926420878',
-    projectId: 'scmu-terrariums',
-    databaseURL: 'https://scmu-terrariums-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'scmu-terrariums.appspot.com',
+    apiKey: '---',
+    appId: '---',
+    messagingSenderId: '----',
+    projectId: '----',
+    databaseURL: 'https://----rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: '-----.appspot.com',
   );
 
 }
