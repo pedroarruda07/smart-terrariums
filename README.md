@@ -60,11 +60,11 @@ The Smart Terrariums ecosystem consists of three main components:
 Below are screenshots showcasing some of the app’s interface and main features.
 
 <div align="center">
-  <img src="assets/login_screen.png" alt="Museum Store" width="150" style="margin: 5px;">
-  <img src="assets/home_screen.png" alt="Home Screen" width="150" style="margin: 5px;">
-  <img src="assets/view_one.png" alt="Challenge Popup" width="150" style="margin: 5px;">
-  <img src="assets/view_two.jpg" alt="Museum Store" width="150" style="margin: 5px;">
-  <img src="assets/prefab_screen.png" alt="Interactive Map" width="150" style="margin: 5px;">
+  <img src="assets/login_screen.png" alt="Museum Store" height="400" style="margin: 15px;">
+  <img src="assets/home_screen.png" alt="Home Screen" height="400" style="margin: 15px;">
+  <img src="assets/view_two.png" alt="Museum Store" height="400" style="margin: 15px;">
+  <img src="assets/view_one.png" alt="Challenge Popup" height="400" style="margin: 15px;">
+  <img src="assets/prefab_screen.png" alt="Interactive Map" height="400" style="margin: 15px;">
 </div>
 
 ---
