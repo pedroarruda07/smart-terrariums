@@ -2,7 +2,7 @@
 #include <WiFi.h>
 
 
-#define FIREBASE_HOST "https://scmu-terrariums-default-rtdb.europe-west1.firebasedatabase.app"
+#define FIREBASE_HOST "https://-----rtdb.europe-west1.firebasedatabase.app"
 
 #define WIFI_SSID "YOUR_WIFI_SSID"
 #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
